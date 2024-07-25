@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ml_app/config/routes/routes.dart';
 import 'package:ml_app/config/theme/app_themes.dart';
+import 'package:ml_app/features/input_data/presentation/pages/select_input/select_input.dart';
 import 'package:ml_app/injection_container.dart';
 
 void main() async {
@@ -31,11 +32,7 @@ class MainApp extends StatelessWidget {
       theme: theme(),
       debugShowCheckedModeBanner: false,
       onGenerateRoute: AppRoutes.onGenerateRoutes,
-      home: const Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
+      home: const SelectInput(),
     );
   }
 }
