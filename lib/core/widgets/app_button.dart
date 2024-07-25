@@ -11,8 +11,8 @@ class AppButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        minimumSize: const Size(300, 60),
-        maximumSize: const Size(300, 60),
+        minimumSize: const Size(double.infinity, 60),
+        maximumSize: const Size(double.infinity, 60),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16.0),
         ),

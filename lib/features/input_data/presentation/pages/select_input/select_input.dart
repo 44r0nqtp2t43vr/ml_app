@@ -8,46 +8,59 @@ class SelectInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AppButton(
-              onPressed: () => _onButtonOnePressed(),
-              textData: "1. 新建工單",
-            ),
-            const SizedBox(height: 40),
-            AppButton(
-              onPressed: () => _onButtonTwoPressed(),
-              textData: "2. 加工中",
-            ),
-            const SizedBox(height: 40),
-            AppButton(
-              onPressed: () => _onButtonThreePressed(),
-              textData: "3. 成品量測",
-            ),
-            const SizedBox(height: 40),
-            AppButton(
-              onPressed: () => _onHistoryButtonPressed(),
-              textData: "歷史資料",
-            ),
-            const SizedBox(height: 40),
-            AppButton(
-              onPressed: () => _onExitButtonPressed(),
-              textData: "離開",
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AppButton(
+                onPressed: () => _onButtonOnePressed(context),
+                textData: "1. 新建工單",
+              ),
+              const SizedBox(height: 40),
+              AppButton(
+                onPressed: () => _onButtonTwoPressed(context),
+                textData: "2. 加工中",
+              ),
+              const SizedBox(height: 40),
+              AppButton(
+                onPressed: () => _onButtonThreePressed(context),
+                textData: "3. 成品量測",
+              ),
+              const SizedBox(height: 40),
+              AppButton(
+                onPressed: () => _onHistoryButtonPressed(context),
+                textData: "歷史資料",
+              ),
+              const SizedBox(height: 40),
+              AppButton(
+                onPressed: () => _onExitButtonPressed(context),
+                textData: "離開",
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  void _onButtonOnePressed() {}
+  void _onButtonOnePressed(BuildContext context) {
+    Navigator.pushNamed(context, '/input1');
+  }
 
-  void _onButtonTwoPressed() {}
+  void _onButtonTwoPressed(BuildContext context) {
+    Navigator.pushNamed(context, '/input2');
+  }
 
-  void _onButtonThreePressed() {}
+  void _onButtonThreePressed(BuildContext context) {
+    Navigator.pushNamed(context, '/input3');
+  }
 
-  void _onHistoryButtonPressed() {}
+  void _onHistoryButtonPressed(BuildContext context) {
+    Navigator.pushNamed(context, '/history');
+  }
 
-  void _onExitButtonPressed() {}
+  void _onExitButtonPressed(BuildContext context) {
+    Navigator.pushNamed(context, '/');
+  }
 }
