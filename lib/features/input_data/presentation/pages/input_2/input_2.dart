@@ -88,7 +88,7 @@ class _Input2State extends State<Input2> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: AppListView(
-        title: "RC No.",
+        title: "批號",
         itemCount: unfinishedRCs.length,
         itemBuilder: (BuildContext context, int index) {
           return Padding(
