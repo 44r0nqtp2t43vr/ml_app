@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ml_app/core/widgets/app_button.dart';
 
 class SelectInput extends StatelessWidget {
@@ -61,6 +62,6 @@ class SelectInput extends StatelessWidget {
   }
 
   void _onExitButtonPressed(BuildContext context) {
-    Navigator.pushNamed(context, '/');
+    SystemNavigator.pop();
   }
 }

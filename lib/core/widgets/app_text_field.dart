@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
+enum DataType { string, double }
+
 class AppTextField extends StatelessWidget {
   final TextEditingController controller;
   final String errorText;
   final String mainLabel;
   final String? subLabel;
+  final DataType dataType;
 
   const AppTextField({
     super.key,
@@ -12,6 +15,7 @@ class AppTextField extends StatelessWidget {
     required this.errorText,
     required this.mainLabel,
     this.subLabel,
+    this.dataType = DataType.string,
   });
 
   @override
@@ -75,8 +79,14 @@ class AppTextField extends StatelessWidget {
             contentPadding: const EdgeInsets.all(16.0),
           ),
           validator: (value) {
-            if (value == null || value.isEmpty) {
-              return errorText;
+            if (dataType == DataType.string) {
+              if (value == null || value.trim().isEmpty) {
+                return errorText;
+              }
+            } else {
+              if (value == null || value.trim().isEmpty || double.tryParse(value.trim()) == null) {
+                return errorText;
+              }
             }
             return null;
           },
