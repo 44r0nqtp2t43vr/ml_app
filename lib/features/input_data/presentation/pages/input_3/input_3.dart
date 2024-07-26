@@ -33,23 +33,23 @@ class _Input3State extends State<Input3> {
   }
 
   void _nextPage() {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        if (_pageInd == 1) {
-          _pageInd++;
-        }
-      });
-    }
+    setState(() {
+      if (_pageInd == 1) {
+        _pageInd++;
+      }
+    });
   }
 
   void _saveData(BuildContext context) {
-    _selectedRC.date = dateTimeToString(DateTime.now());
-    _selectedRC.dimensionalAccuracy = double.parse(_dimensionalAccuracyController.text.trim());
-    _selectedRC.surfaceRoughness = double.parse(_surfaceRoughnessController.text.trim());
-    _selectedRC.runout = double.parse(_runoutController.text.trim());
+    if (_formKey.currentState!.validate()) {
+      _selectedRC.date = dateTimeToString(DateTime.now());
+      _selectedRC.dimensionalAccuracy = double.parse(_dimensionalAccuracyController.text.trim());
+      _selectedRC.surfaceRoughness = double.parse(_surfaceRoughnessController.text.trim());
+      _selectedRC.runout = double.parse(_runoutController.text.trim());
 
-    print(_selectedRC.toMap());
-    Navigator.of(context).pop();
+      print(_selectedRC.toMap());
+      Navigator.of(context).pop();
+    }
   }
 
   @override
@@ -162,6 +162,7 @@ class _Input3State extends State<Input3> {
               physics: const BouncingScrollPhysics(),
               child: Column(
                 children: [
+                  const SizedBox(height: 20),
                   AppTextField(
                     controller: _dimensionalAccuracyController,
                     errorText: "這是必需的",

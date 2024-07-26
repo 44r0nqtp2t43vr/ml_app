@@ -28,30 +28,32 @@ class _Input1State extends State<Input1> {
   final _ambientTemperatureController = TextEditingController();
 
   void _nextPage() {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        if (_pageInd >= 0 && _pageInd <= 3) {
-          _pageInd++;
-        }
-      });
-    }
+    setState(() {
+      if (_pageInd >= 0 && _pageInd <= 3) {
+        _pageInd++;
+      }
+    });
   }
 
   void _saveData(BuildContext context) {
-    _newRC.rcno = _rcnoController.text.trim();
-    _newRC.date = dateTimeToString(DateTime.now());
-    _newRC.material = _materialController.text.trim();
-    _newRC.supplier = _supplierController.text.trim();
-    _newRC.hardness = _hardnessController.text.trim();
-    _newRC.targetDimensions = double.parse(_targetDimensionsController.text.trim());
-    _newRC.tolerancePrecision = double.parse(_tolerancePrecisionController.text.trim());
-    _newRC.measuredDimensions = double.parse(_measuredDimensionsController.text.trim());
-    _newRC.dimensionalAllowance = double.parse(_dimensionalAllowanceController.text.trim());
-    _newRC.ambientHumidity = double.parse(_ambientHumidityController.text.trim());
-    _newRC.ambientTemperature = double.parse(_ambientTemperatureController.text.trim());
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _newRC.rcno = _rcnoController.text.trim();
+        _newRC.date = dateTimeToString(DateTime.now());
+        _newRC.material = _materialController.text.trim();
+        _newRC.supplier = _supplierController.text.trim();
+        _newRC.hardness = _hardnessController.text.trim();
+        _newRC.targetDimensions = double.parse(_targetDimensionsController.text.trim());
+        _newRC.tolerancePrecision = double.parse(_tolerancePrecisionController.text.trim());
+        _newRC.measuredDimensions = double.parse(_measuredDimensionsController.text.trim());
+        _newRC.dimensionalAllowance = double.parse(_dimensionalAllowanceController.text.trim());
+        _newRC.ambientHumidity = double.parse(_ambientHumidityController.text.trim());
+        _newRC.ambientTemperature = double.parse(_ambientTemperatureController.text.trim());
 
-    print(_newRC.toMap());
-    Navigator.of(context).pop();
+        print(_newRC.toMap());
+        Navigator.of(context).pop();
+      });
+    }
   }
 
   @override
@@ -272,6 +274,7 @@ class _Input1State extends State<Input1> {
               physics: const BouncingScrollPhysics(),
               child: Column(
                 children: [
+                  const SizedBox(height: 20),
                   AppTextField(
                     controller: _rcnoController,
                     errorText: "這是必需的",

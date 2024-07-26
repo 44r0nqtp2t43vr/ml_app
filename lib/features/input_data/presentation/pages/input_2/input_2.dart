@@ -35,25 +35,25 @@ class _Input2State extends State<Input2> {
   }
 
   void _nextPage() {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        if (_pageInd >= 1 && _pageInd <= 2) {
-          _pageInd++;
-        }
-      });
-    }
+    setState(() {
+      if (_pageInd >= 1 && _pageInd <= 2) {
+        _pageInd++;
+      }
+    });
   }
 
   void _saveData(BuildContext context) {
-    _selectedRC.date = dateTimeToString(DateTime.now());
-    _selectedRC.feedRate = double.parse(_feedRateController.text.trim());
-    _selectedRC.spindleSpeed = double.parse(_spindleSpeedController.text.trim());
-    _selectedRC.cuttingVolume = double.parse(_cuttingVolumeController.text.trim());
-    _selectedRC.spindleCurrent = double.parse(_spindleCurrentController.text.trim());
-    _selectedRC.load = double.parse(_loadController.text.trim());
+    if (_formKey.currentState!.validate()) {
+      _selectedRC.date = dateTimeToString(DateTime.now());
+      _selectedRC.feedRate = double.parse(_feedRateController.text.trim());
+      _selectedRC.spindleSpeed = double.parse(_spindleSpeedController.text.trim());
+      _selectedRC.cuttingVolume = double.parse(_cuttingVolumeController.text.trim());
+      _selectedRC.spindleCurrent = double.parse(_spindleCurrentController.text.trim());
+      _selectedRC.load = double.parse(_loadController.text.trim());
 
-    print(_selectedRC.toMap());
-    Navigator.of(context).pop();
+      print(_selectedRC.toMap());
+      Navigator.of(context).pop();
+    }
   }
 
   @override
@@ -209,6 +209,7 @@ class _Input2State extends State<Input2> {
               physics: const BouncingScrollPhysics(),
               child: Column(
                 children: [
+                  const SizedBox(height: 20),
                   AppTextField(
                     controller: _feedRateController,
                     errorText: "這是必需的",
