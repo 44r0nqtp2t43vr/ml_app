@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:ml_app/core/resources/formatters.dart';
+import 'package:ml_app/core/controllers/files_controller.dart';
 import 'package:ml_app/core/widgets/app_button.dart';
 import 'package:ml_app/core/widgets/app_text_field.dart';
 import 'package:ml_app/features/input_data/domain/rc.dart';
+import 'package:ml_app/injection_container.dart';
 
 class Input1 extends StatefulWidget {
   const Input1({super.key});
@@ -35,11 +36,10 @@ class _Input1State extends State<Input1> {
     });
   }
 
-  void _saveData(BuildContext context) {
+  void _saveData(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _newRC.rcno = _rcnoController.text.trim();
-        _newRC.date = dateTimeToString(DateTime.now());
         _newRC.material = _materialController.text.trim();
         _newRC.supplier = _supplierController.text.trim();
         _newRC.hardness = _hardnessController.text.trim();
@@ -49,8 +49,9 @@ class _Input1State extends State<Input1> {
         _newRC.dimensionalAllowance = double.parse(_dimensionalAllowanceController.text.trim());
         _newRC.ambientHumidity = double.parse(_ambientHumidityController.text.trim());
         _newRC.ambientTemperature = double.parse(_ambientTemperatureController.text.trim());
+      });
 
-        print(_newRC.toMap());
+      sl<FilesController>().writeCsvToDirectory(_newRC).then((value) {
         Navigator.of(context).pop();
       });
     }

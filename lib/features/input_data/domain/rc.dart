@@ -1,3 +1,25 @@
+const header = [
+  "RC No.",
+  "Date",
+  "Material",
+  "Supplier",
+  "Hardness",
+  "Target dimensions",
+  "Tolerance Precision",
+  "Measured dimensions",
+  "Dimensional Allowance",
+  "Ambient Humidity",
+  "Ambient Temperature",
+  "Feed Rate",
+  "Spindle Speed",
+  "Cutting Volume",
+  "Spindle Current",
+  "Load",
+  "Dimensional Accuracy",
+  "Surface Roughness",
+  "Runout",
+];
+
 class RC {
   String? rcno;
   String? date;
@@ -63,5 +85,29 @@ class RC {
       'surfaceRoughness': surfaceRoughness,
       'runout': runout,
     };
+  }
+
+  List<dynamic> toList() {
+    return [
+      rcno,
+      date,
+      material,
+      supplier,
+      hardness,
+      targetDimensions,
+      tolerancePrecision,
+      measuredDimensions,
+      dimensionalAllowance,
+      ambientHumidity,
+      ambientTemperature,
+      feedRate,
+      spindleSpeed,
+      cuttingVolume,
+      spindleCurrent,
+      load,
+      dimensionalAccuracy,
+      surfaceRoughness,
+      runout,
+    ];
   }
 }

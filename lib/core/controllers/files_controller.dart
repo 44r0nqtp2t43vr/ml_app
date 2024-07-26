@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:csv/csv.dart';
 import 'package:get/get.dart';
+import 'package:ml_app/core/resources/formatters.dart';
+import 'package:ml_app/features/input_data/domain/rc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -23,27 +25,32 @@ class FilesController extends GetxController {
     return null;
   }
 
-  Future<void> writeCsvToDirectory() async {
-    final directoryPath = await getExternalSdCardPath();
+  Future<void> writeCsvToDirectory(RC data, {bool isEdit = false}) async {
+    final today = DateTime.now();
+    data.date = dateTimeToString(today);
 
+    final directoryPath = await getExternalSdCardPath();
     if (directoryPath == null) {
       return;
     }
 
-    List<List<dynamic>> rows = [
-      ["Name", "Age", "City"],
-      ["John Doe", "30", "New York"],
-      ["Jane Smith", "25", "Los Angeles"],
-      ["Sam Johnson", "40", "Chicago"]
-    ];
-
-    String csvData = const ListToCsvConverter().convert(rows);
-
-    final file = File('$directoryPath/202407.csv');
-
-    await file.writeAsString(csvData);
-
-    print('CSV file written successfully to ${file.path}');
+    final file = File('$directoryPath/${dateTimeToFilename(today)}.csv');
+    try {
+      if (await file.exists()) {
+        if (isEdit) {
+        } else {
+          List<List<dynamic>> csvRow = [data.toList()];
+          String csvData = const ListToCsvConverter().convert(csvRow, convertNullTo: '');
+          await file.writeAsString('\n$csvData', mode: FileMode.append);
+        }
+      } else {
+        List<List<dynamic>> csvTable = [header, data.toList()];
+        String csvData = const ListToCsvConverter().convert(csvTable, convertNullTo: '');
+        await file.writeAsString(csvData);
+      }
+    } catch (e) {
+      return;
+    }
   }
 
   Future<void> readCsvFromDirectory() async {

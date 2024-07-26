@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ml_app/core/controllers/files_controller.dart';
 import 'package:ml_app/core/widgets/app_button.dart';
-import 'package:ml_app/injection_container.dart';
 
 class SelectInput extends StatelessWidget {
   const SelectInput({super.key});
@@ -60,9 +58,7 @@ class SelectInput extends StatelessWidget {
   }
 
   void _onHistoryButtonPressed(BuildContext context) async {
-    await sl<FilesController>().writeCsvToDirectory();
-    await sl<FilesController>().readCsvFromDirectory();
-    // Navigator.pushNamed(context, '/history');
+    Navigator.pushNamed(context, '/history');
   }
 
   void _onExitButtonPressed(BuildContext context) {

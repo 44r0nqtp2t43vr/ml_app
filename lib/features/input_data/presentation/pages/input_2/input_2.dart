@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ml_app/core/resources/formatters.dart';
 import 'package:ml_app/core/widgets/app_button.dart';
 import 'package:ml_app/core/widgets/app_list_view.dart';
 import 'package:ml_app/core/widgets/app_text_field.dart';
@@ -44,7 +43,6 @@ class _Input2State extends State<Input2> {
 
   void _saveData(BuildContext context) {
     if (_formKey.currentState!.validate()) {
-      _selectedRC.date = dateTimeToString(DateTime.now());
       _selectedRC.feedRate = double.parse(_feedRateController.text.trim());
       _selectedRC.spindleSpeed = double.parse(_spindleSpeedController.text.trim());
       _selectedRC.cuttingVolume = double.parse(_cuttingVolumeController.text.trim());

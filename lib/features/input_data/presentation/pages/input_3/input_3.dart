@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ml_app/core/resources/formatters.dart';
 import 'package:ml_app/core/widgets/app_button.dart';
 import 'package:ml_app/core/widgets/app_list_view.dart';
 import 'package:ml_app/core/widgets/app_text_field.dart';
@@ -42,7 +41,6 @@ class _Input3State extends State<Input3> {
 
   void _saveData(BuildContext context) {
     if (_formKey.currentState!.validate()) {
-      _selectedRC.date = dateTimeToString(DateTime.now());
       _selectedRC.dimensionalAccuracy = double.parse(_dimensionalAccuracyController.text.trim());
       _selectedRC.surfaceRoughness = double.parse(_surfaceRoughnessController.text.trim());
       _selectedRC.runout = double.parse(_runoutController.text.trim());
