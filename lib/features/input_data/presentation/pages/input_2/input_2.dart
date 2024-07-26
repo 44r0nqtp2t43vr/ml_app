@@ -1,8 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ml_app/core/controllers/files_controller.dart';
 import 'package:ml_app/core/widgets/app_button.dart';
 import 'package:ml_app/core/widgets/app_list_view.dart';
 import 'package:ml_app/core/widgets/app_text_field.dart';
 import 'package:ml_app/features/input_data/domain/rc.dart';
+import 'package:ml_app/injection_container.dart';
 
 class Input2 extends StatefulWidget {
   const Input2({super.key});
@@ -14,6 +17,8 @@ class Input2 extends StatefulWidget {
 class _Input2State extends State<Input2> {
   late RC _selectedRC;
   int _pageInd = 0;
+  bool _isLoadingRCs = true;
+  List<dynamic> _unfinishedRCs = [];
 
   final _formKey = GlobalKey<FormState>();
   final _feedRateController = TextEditingController();
@@ -22,9 +27,14 @@ class _Input2State extends State<Input2> {
   final _spindleCurrentController = TextEditingController();
   final _loadController = TextEditingController();
 
-  final unfinishedRCs = [
-    RC(rcno: "XXXXXXXXXX"),
-  ];
+  Future<void> _initializeRCs() async {
+    sl<FilesController>().getRCsList(ForScreen.input2).then((value) {
+      setState(() {
+        _unfinishedRCs = value;
+        _isLoadingRCs = false;
+      });
+    });
+  }
 
   void _onSelectRC(RC selectedRC) {
     setState(() {
@@ -49,21 +59,30 @@ class _Input2State extends State<Input2> {
       _selectedRC.spindleCurrent = double.parse(_spindleCurrentController.text.trim());
       _selectedRC.load = double.parse(_loadController.text.trim());
 
-      print(_selectedRC.toMap());
       Navigator.of(context).pop();
     }
   }
 
   @override
+  void initState() {
+    _initializeRCs();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Form(
-        key: _formKey,
-        child: Align(
-          alignment: _pageInd == 0 ? Alignment.topCenter : Alignment.bottomCenter,
-          child: _getBody(context),
-        ),
-      ),
+      body: _isLoadingRCs
+          ? const Center(
+              child: CupertinoActivityIndicator(),
+            )
+          : Form(
+              key: _formKey,
+              child: Align(
+                alignment: _pageInd == 0 ? Alignment.topLeft : Alignment.bottomCenter,
+                child: _getBody(context),
+              ),
+            ),
     );
   }
 
@@ -87,13 +106,13 @@ class _Input2State extends State<Input2> {
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: AppListView(
         title: "批號",
-        itemCount: unfinishedRCs.length,
+        itemCount: _unfinishedRCs.length,
         itemBuilder: (BuildContext context, int index) {
           return Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
             child: AppButton(
-              onPressed: () => _onSelectRC(unfinishedRCs[index]),
-              textData: unfinishedRCs[index].rcno!,
+              onPressed: () => _onSelectRC(_unfinishedRCs[index]),
+              textData: _unfinishedRCs[index].rcno!,
             ),
           );
         },

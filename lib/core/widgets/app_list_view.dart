@@ -24,14 +24,21 @@ class AppListView extends StatelessWidget {
             fontSize: 32,
           ),
         ),
-        Expanded(
-          child: ListView.builder(
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
-            itemCount: itemCount,
-            itemBuilder: itemBuilder,
-          ),
-        ),
+        itemCount == 0
+            ? const Text(
+                "空值",
+                style: TextStyle(
+                  fontSize: 32,
+                ),
+              )
+            : Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: itemCount,
+                  itemBuilder: itemBuilder,
+                ),
+              ),
       ],
     );
   }

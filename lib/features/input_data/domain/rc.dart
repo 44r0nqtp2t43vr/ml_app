@@ -111,3 +111,35 @@ class RC {
     ];
   }
 }
+
+RC listToRC(List<dynamic> list) {
+  return RC(
+    rcno: list[0],
+    date: list[1],
+    material: list[2],
+    supplier: list[3],
+    hardness: list[4],
+    targetDimensions: double.tryParse(list[5].toString()),
+    tolerancePrecision: double.tryParse(list[6].toString()),
+    measuredDimensions: double.tryParse(list[7].toString()),
+    dimensionalAllowance: double.tryParse(list[8].toString()),
+    ambientHumidity: double.tryParse(list[9].toString()),
+    ambientTemperature: double.tryParse(list[10].toString()),
+    feedRate: double.tryParse(list[11].toString()),
+    spindleSpeed: double.tryParse(list[12].toString()),
+    cuttingVolume: double.tryParse(list[13].toString()),
+    spindleCurrent: double.tryParse(list[14].toString()),
+    load: double.tryParse(list[15].toString()),
+    dimensionalAccuracy: double.tryParse(list[16].toString()),
+    surfaceRoughness: double.tryParse(list[17].toString()),
+    runout: double.tryParse(list[18].toString()),
+  );
+}
+
+bool isListIncompForI2(List<dynamic> list) {
+  return list[11] == '' || list[12] == '' || list[13] == '' || list[14] == '' || list[15] == '';
+}
+
+bool isListIncompForI3(List<dynamic> list) {
+  return list[16] == '' || list[17] == '' || list[18] == '';
+}
