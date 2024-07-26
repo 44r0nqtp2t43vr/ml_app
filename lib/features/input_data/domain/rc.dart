@@ -54,6 +54,11 @@ class RC {
       'dimensionalAllowance': dimensionalAllowance,
       'ambientHumidity': ambientHumidity,
       'ambientTemperature': ambientTemperature,
+      'feedRate': feedRate,
+      'spindleSpeed': spindleSpeed,
+      'cuttingVolume': cuttingVolume,
+      'spindleCurrent': spindleCurrent,
+      'load': load,
     };
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ml_app/features/input_data/presentation/pages/input_1/input_1.dart';
+import 'package:ml_app/features/input_data/presentation/pages/input_2/input_2.dart';
 import 'package:ml_app/features/input_data/presentation/pages/select_input/select_input.dart';
 
 class AppRoutes {
@@ -10,6 +11,9 @@ class AppRoutes {
 
       case '/input1':
         return _materialRoute(const Input1());
+
+      case '/input2':
+        return _materialRoute(const Input2());
 
       default:
         return _materialRoute(const SelectInput());
