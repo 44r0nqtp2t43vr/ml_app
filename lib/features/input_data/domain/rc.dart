@@ -59,6 +59,9 @@ class RC {
       'cuttingVolume': cuttingVolume,
       'spindleCurrent': spindleCurrent,
       'load': load,
+      'dimensionalAccuracy': dimensionalAccuracy,
+      'surfaceRoughness': surfaceRoughness,
+      'runout': runout,
     };
   }
 }
