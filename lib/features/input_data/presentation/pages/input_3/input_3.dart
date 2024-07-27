@@ -51,11 +51,16 @@ class _Input3State extends State<Input3> {
 
   void _saveData(BuildContext context) {
     if (_formKey.currentState!.validate()) {
-      _selectedRC.dimensionalAccuracy = double.parse(_dimensionalAccuracyController.text.trim());
-      _selectedRC.surfaceRoughness = double.parse(_surfaceRoughnessController.text.trim());
-      _selectedRC.runout = double.parse(_runoutController.text.trim());
+      setState(() {
+        _selectedRC.dimensionalAccuracy = double.parse(_dimensionalAccuracyController.text.trim());
+        _selectedRC.surfaceRoughness = double.parse(_surfaceRoughnessController.text.trim());
+        _selectedRC.runout = double.parse(_runoutController.text.trim());
+        _isLoadingRCs = true;
+      });
 
-      Navigator.of(context).pop();
+      sl<FilesController>().writeCsvToDirectory(_selectedRC, isEdit: true).then((value) {
+        Navigator.of(context).pop();
+      });
     }
   }
 

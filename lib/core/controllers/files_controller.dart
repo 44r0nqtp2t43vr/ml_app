@@ -22,13 +22,19 @@ class FilesController extends GetxController {
   Future<String?> getExternalSdCardPath() async {
     if (await _requestPermission(Permission.storage)) {
       List<Directory>? extDirectories = await getExternalStorageDirectories();
-      return extDirectories?[1].path;
+      if (extDirectories == null) {
+        return null;
+      } else if (extDirectories.length == 1) {
+        return extDirectories[0].path;
+      }
+      return extDirectories[1].path;
     }
     return null;
   }
 
   Future<void> writeCsvToDirectory(RC data, {bool isEdit = false}) async {
     final today = DateTime.now();
+    final oldDate = data.date;
     data.date = dateTimeToString(today);
 
     final directoryPath = await getExternalSdCardPath();
@@ -38,17 +44,48 @@ class FilesController extends GetxController {
 
     final file = File('$directoryPath/${dateTimeToFilename(today)}.csv');
     try {
-      if (await file.exists()) {
-        if (isEdit) {
+      if (isEdit) {
+        if (stringToFilename(oldDate!) == stringToFilename(data.date!)) {
+          // if same month as old row, simply edit the row
+          final csvData = await file.readAsString();
+          List<List<dynamic>> rows = const CsvToListConverter().convert(csvData);
+          final indexToEdit = rows.indexWhere((row) => row[0] == data.rcno);
+          rows[indexToEdit] = data.toList();
+          String csvDataUpdated = const ListToCsvConverter().convert(rows, convertNullTo: '');
+          await file.writeAsString(csvDataUpdated);
         } else {
+          // if different month as old row, delete the row from the old csv
+          final oldFile = File('$directoryPath/${stringToFilename(oldDate)}.csv');
+          final oldCsvData = await oldFile.readAsString();
+          List<List<dynamic>> oldRows = const CsvToListConverter().convert(oldCsvData);
+          oldRows.removeWhere((row) => row[0] == data.rcno);
+          String csvDataUpdated = const ListToCsvConverter().convert(oldRows, convertNullTo: '');
+          await oldFile.writeAsString(csvDataUpdated);
+
+          if (await file.exists()) {
+            // append new data to csv
+            List<List<dynamic>> csvRow = [data.toList()];
+            String csvData = const ListToCsvConverter().convert(csvRow, convertNullTo: '');
+            await file.writeAsString('\r\n$csvData', mode: FileMode.append);
+          } else {
+            // create a new csv file and insert the header with the data
+            List<List<dynamic>> csvTable = [header, data.toList()];
+            String csvData = const ListToCsvConverter().convert(csvTable, convertNullTo: '');
+            await file.writeAsString(csvData);
+          }
+        }
+      } else {
+        if (await file.exists()) {
+          // append new data to csv
           List<List<dynamic>> csvRow = [data.toList()];
           String csvData = const ListToCsvConverter().convert(csvRow, convertNullTo: '');
           await file.writeAsString('\r\n$csvData', mode: FileMode.append);
+        } else {
+          // create a new csv file and insert the header with the data
+          List<List<dynamic>> csvTable = [header, data.toList()];
+          String csvData = const ListToCsvConverter().convert(csvTable, convertNullTo: '');
+          await file.writeAsString(csvData);
         }
-      } else {
-        List<List<dynamic>> csvTable = [header, data.toList()];
-        String csvData = const ListToCsvConverter().convert(csvTable, convertNullTo: '');
-        await file.writeAsString(csvData);
       }
     } catch (e) {
       return;

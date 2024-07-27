@@ -53,13 +53,18 @@ class _Input2State extends State<Input2> {
 
   void _saveData(BuildContext context) {
     if (_formKey.currentState!.validate()) {
-      _selectedRC.feedRate = double.parse(_feedRateController.text.trim());
-      _selectedRC.spindleSpeed = double.parse(_spindleSpeedController.text.trim());
-      _selectedRC.cuttingVolume = double.parse(_cuttingVolumeController.text.trim());
-      _selectedRC.spindleCurrent = double.parse(_spindleCurrentController.text.trim());
-      _selectedRC.load = double.parse(_loadController.text.trim());
+      setState(() {
+        _selectedRC.feedRate = double.parse(_feedRateController.text.trim());
+        _selectedRC.spindleSpeed = double.parse(_spindleSpeedController.text.trim());
+        _selectedRC.cuttingVolume = double.parse(_cuttingVolumeController.text.trim());
+        _selectedRC.spindleCurrent = double.parse(_spindleCurrentController.text.trim());
+        _selectedRC.load = double.parse(_loadController.text.trim());
+        _isLoadingRCs = true;
+      });
 
-      Navigator.of(context).pop();
+      sl<FilesController>().writeCsvToDirectory(_selectedRC, isEdit: true).then((value) {
+        Navigator.of(context).pop();
+      });
     }
   }
 
