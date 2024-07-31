@@ -49,7 +49,7 @@ class FilesController extends GetxController {
           // if same month as old row, simply edit the row
           final csvData = await file.readAsString();
           List<List<dynamic>> rows = const CsvToListConverter().convert(csvData);
-          final indexToEdit = rows.indexWhere((row) => row[0] == data.rcno);
+          final indexToEdit = rows.indexWhere((row) => row[0].toString() == data.rcno);
           rows[indexToEdit] = data.toList();
           String csvDataUpdated = const ListToCsvConverter().convert(rows, convertNullTo: '');
           await file.writeAsString(csvDataUpdated);
@@ -58,7 +58,7 @@ class FilesController extends GetxController {
           final oldFile = File('$directoryPath/${stringToFilename(oldDate)}.csv');
           final oldCsvData = await oldFile.readAsString();
           List<List<dynamic>> oldRows = const CsvToListConverter().convert(oldCsvData);
-          oldRows.removeWhere((row) => row[0] == data.rcno);
+          oldRows.removeWhere((row) => row[0].toString() == data.rcno);
           String csvDataUpdated = const ListToCsvConverter().convert(oldRows, convertNullTo: '');
           await oldFile.writeAsString(csvDataUpdated);
 
