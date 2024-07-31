@@ -114,11 +114,11 @@ class RC {
 
 RC listToRC(List<dynamic> list) {
   return RC(
-    rcno: list[0],
+    rcno: list[0].toString(),
     date: list[1],
-    material: list[2],
-    supplier: list[3],
-    hardness: list[4],
+    material: list[2].toString(),
+    supplier: list[3].toString(),
+    hardness: list[4].toString(),
     targetDimensions: double.tryParse(list[5].toString()),
     tolerancePrecision: double.tryParse(list[6].toString()),
     measuredDimensions: double.tryParse(list[7].toString()),

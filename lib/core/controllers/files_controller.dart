@@ -21,7 +21,7 @@ class FilesController extends GetxController {
 
   Future<String?> getExternalSdCardPath() async {
     if (await _requestPermission(Permission.storage)) {
-      List<Directory>? extDirectories = await getExternalStorageDirectories();
+      List<Directory>? extDirectories = await getExternalStorageDirectories(type: StorageDirectory.documents);
       if (extDirectories == null) {
         return null;
       } else if (extDirectories.length == 1) {
