@@ -16,8 +16,8 @@ class Input2 extends StatefulWidget {
 
 class _Input2State extends State<Input2> {
   late RC _selectedRC;
-  int _pageInd = 0;
   bool _isLoadingRCs = true;
+  bool _hasSelectedRC = false;
   List<dynamic> _unfinishedRCs = [];
 
   final _formKey = GlobalKey<FormState>();
@@ -25,7 +25,6 @@ class _Input2State extends State<Input2> {
   final _spindleSpeedController = TextEditingController();
   final _cuttingVolumeController = TextEditingController();
   final _spindleCurrentController = TextEditingController();
-  final _loadController = TextEditingController();
 
   Future<void> _initializeRCs() async {
     sl<FilesController>().getRCsList(ForScreen.input2).then((value) {
@@ -39,15 +38,7 @@ class _Input2State extends State<Input2> {
   void _onSelectRC(RC selectedRC) {
     setState(() {
       _selectedRC = selectedRC;
-      _pageInd++;
-    });
-  }
-
-  void _nextPage() {
-    setState(() {
-      if (_pageInd >= 1 && _pageInd <= 2) {
-        _pageInd++;
-      }
+      _hasSelectedRC = true;
     });
   }
 
@@ -58,7 +49,6 @@ class _Input2State extends State<Input2> {
         _selectedRC.spindleSpeed = double.parse(_spindleSpeedController.text.trim());
         _selectedRC.cuttingVolume = double.parse(_cuttingVolumeController.text.trim());
         _selectedRC.spindleCurrent = double.parse(_spindleCurrentController.text.trim());
-        _selectedRC.load = double.parse(_loadController.text.trim());
         _isLoadingRCs = true;
       });
 
@@ -83,26 +73,16 @@ class _Input2State extends State<Input2> {
             )
           : Form(
               key: _formKey,
-              child: Align(
-                alignment: _pageInd == 0 ? Alignment.topLeft : Alignment.bottomCenter,
-                child: _getBody(context),
-              ),
+              child: _getBody(context),
             ),
     );
   }
 
   Widget _getBody(BuildContext context) {
-    switch (_pageInd) {
-      case 0:
-        return _selectRC();
-      case 1:
-        return _input2Page1();
-      case 2:
-        return _input2Page2();
-      case 3:
-        return _verificationPage(context);
-      default:
-        return _selectRC();
+    if (_hasSelectedRC) {
+      return _inputData(context);
+    } else {
+      return _selectRC();
     }
   }
 
@@ -125,97 +105,7 @@ class _Input2State extends State<Input2> {
     );
   }
 
-  Widget _input2Page1() {
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.only(
-            left: 20.0,
-            right: 20.0,
-            top: 12.0,
-            bottom: 40.0,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              AppTextField(
-                controller: _feedRateController,
-                errorText: "這是必需的",
-                mainLabel: "進給量",
-                subLabel: "(m/min)",
-                dataType: DataType.double,
-              ),
-              const SizedBox(height: 40),
-              AppTextField(
-                controller: _spindleSpeedController,
-                errorText: "這是必需的",
-                mainLabel: "主軸轉速",
-                subLabel: "(rpm)",
-                dataType: DataType.double,
-              ),
-              const SizedBox(height: 40),
-              AppTextField(
-                controller: _cuttingVolumeController,
-                errorText: "這是必需的",
-                mainLabel: "切削量",
-                subLabel: "(mm)",
-                dataType: DataType.double,
-              ),
-              const SizedBox(height: 60),
-              AppButton(
-                onPressed: () => _nextPage(),
-                textData: "下一頁",
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _input2Page2() {
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.only(
-            left: 20.0,
-            right: 20.0,
-            top: 12.0,
-            bottom: 40.0,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AppTextField(
-                controller: _spindleCurrentController,
-                errorText: "這是必需的",
-                mainLabel: "主軸電流",
-                subLabel: "(A)",
-                dataType: DataType.double,
-              ),
-              const SizedBox(height: 40),
-              AppTextField(
-                controller: _loadController,
-                errorText: "這是必需的",
-                mainLabel: "負載",
-                subLabel: "(%)",
-                dataType: DataType.double,
-              ),
-              const SizedBox(height: 60),
-              AppButton(
-                onPressed: () => _nextPage(),
-                textData: "下一頁",
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _verificationPage(BuildContext context) {
+  Widget _inputData(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
         left: 20.0,
@@ -261,14 +151,6 @@ class _Input2State extends State<Input2> {
                     errorText: "這是必需的",
                     mainLabel: "主軸電流",
                     subLabel: "(A)",
-                    dataType: DataType.double,
-                  ),
-                  const SizedBox(height: 40),
-                  AppTextField(
-                    controller: _loadController,
-                    errorText: "這是必需的",
-                    mainLabel: "負載",
-                    subLabel: "(%)",
                     dataType: DataType.double,
                   ),
                 ],

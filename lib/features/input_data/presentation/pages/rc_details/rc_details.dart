@@ -42,6 +42,11 @@ class RCDetails extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     AppLabelledText(
+                      label: "機台",
+                      text: selectedRC.machine,
+                    ),
+                    const SizedBox(height: 20),
+                    AppLabelledText(
                       label: "材料",
                       text: selectedRC.material,
                     ),
@@ -52,8 +57,13 @@ class RCDetails extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     AppLabelledText(
-                      label: "硬度",
-                      text: selectedRC.hardness,
+                      label: "硬度(前)",
+                      text: selectedRC.hardness1,
+                    ),
+                    const SizedBox(height: 20),
+                    AppLabelledText(
+                      label: "硬度(後)",
+                      text: selectedRC.hardness2,
                     ),
                     const SizedBox(height: 20),
                     AppLabelledText(
@@ -62,18 +72,13 @@ class RCDetails extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     AppLabelledText(
-                      label: "圖面公差",
-                      text: selectedRC.tolerancePrecision.toString(),
+                      label: "尺寸預留量",
+                      text: selectedRC.dimensionalAllowance.toString(),
                     ),
                     const SizedBox(height: 20),
                     AppLabelledText(
                       label: "材料尺寸",
                       text: selectedRC.measuredDimensions.toString(),
-                    ),
-                    const SizedBox(height: 20),
-                    AppLabelledText(
-                      label: "尺寸預留量",
-                      text: selectedRC.dimensionalAllowance.toString(),
                     ),
                     const SizedBox(height: 20),
                     AppLabelledText(
@@ -107,23 +112,38 @@ class RCDetails extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     AppLabelledText(
-                      label: "負載",
-                      text: selectedRC.load.toString(),
+                      label: "最大尺寸",
+                      text: selectedRC.maxDimensionalAccuracy.toString(),
                     ),
                     const SizedBox(height: 20),
                     AppLabelledText(
-                      label: "尺寸精度",
-                      text: selectedRC.dimensionalAccuracy.toString(),
+                      label: "最小尺寸",
+                      text: selectedRC.minDimensionalAccuracy.toString(),
                     ),
                     const SizedBox(height: 20),
                     AppLabelledText(
-                      label: "表面粗度",
-                      text: selectedRC.surfaceRoughness.toString(),
+                      label: "表粗(前)",
+                      text: selectedRC.surfaceRoughness1.toString(),
                     ),
                     const SizedBox(height: 20),
                     AppLabelledText(
-                      label: "偏擺",
-                      text: selectedRC.runout.toString(),
+                      label: "表粗(中)",
+                      text: selectedRC.surfaceRoughness2.toString(),
+                    ),
+                    const SizedBox(height: 20),
+                    AppLabelledText(
+                      label: "表粗(後)",
+                      text: selectedRC.surfaceRoughness3.toString(),
+                    ),
+                    const SizedBox(height: 20),
+                    AppLabelledText(
+                      label: "圓度",
+                      text: selectedRC.roundness.toString(),
+                    ),
+                    const SizedBox(height: 20),
+                    AppLabelledText(
+                      label: "直度",
+                      text: selectedRC.straightness.toString(),
                     ),
                     const SizedBox(height: 20),
                   ],

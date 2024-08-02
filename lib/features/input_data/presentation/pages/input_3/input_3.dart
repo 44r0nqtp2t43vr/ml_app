@@ -16,14 +16,18 @@ class Input3 extends StatefulWidget {
 
 class _Input3State extends State<Input3> {
   late RC _selectedRC;
-  int _pageInd = 0;
   bool _isLoadingRCs = true;
+  bool _hasSelectedRC = false;
   List<dynamic> _unfinishedRCs = [];
 
   final _formKey = GlobalKey<FormState>();
-  final _dimensionalAccuracyController = TextEditingController();
-  final _surfaceRoughnessController = TextEditingController();
-  final _runoutController = TextEditingController();
+  final _maxDimensionalAccuracyController = TextEditingController();
+  final _minDimensionalAccuracyController = TextEditingController();
+  final _surfaceRoughness1Controller = TextEditingController();
+  final _surfaceRoughness2Controller = TextEditingController();
+  final _surfaceRoughness3Controller = TextEditingController();
+  final _roundnessController = TextEditingController();
+  final _straightnessController = TextEditingController();
 
   Future<void> _initializeRCs() async {
     sl<FilesController>().getRCsList(ForScreen.input3).then((value) {
@@ -37,24 +41,20 @@ class _Input3State extends State<Input3> {
   void _onSelectRC(RC selectedRC) {
     setState(() {
       _selectedRC = selectedRC;
-      _pageInd++;
-    });
-  }
-
-  void _nextPage() {
-    setState(() {
-      if (_pageInd == 1) {
-        _pageInd++;
-      }
+      _hasSelectedRC = true;
     });
   }
 
   void _saveData(BuildContext context) {
     if (_formKey.currentState!.validate()) {
       setState(() {
-        _selectedRC.dimensionalAccuracy = double.parse(_dimensionalAccuracyController.text.trim());
-        _selectedRC.surfaceRoughness = double.parse(_surfaceRoughnessController.text.trim());
-        _selectedRC.runout = double.parse(_runoutController.text.trim());
+        _selectedRC.maxDimensionalAccuracy = double.parse(_maxDimensionalAccuracyController.text.trim());
+        _selectedRC.minDimensionalAccuracy = double.parse(_minDimensionalAccuracyController.text.trim());
+        _selectedRC.surfaceRoughness1 = double.parse(_surfaceRoughness1Controller.text.trim());
+        _selectedRC.surfaceRoughness2 = double.parse(_surfaceRoughness2Controller.text.trim());
+        _selectedRC.surfaceRoughness3 = double.parse(_surfaceRoughness3Controller.text.trim());
+        _selectedRC.roundness = double.parse(_roundnessController.text.trim());
+        _selectedRC.straightness = double.parse(_straightnessController.text.trim());
         _isLoadingRCs = true;
       });
 
@@ -79,24 +79,16 @@ class _Input3State extends State<Input3> {
             )
           : Form(
               key: _formKey,
-              child: Align(
-                alignment: _pageInd == 0 ? Alignment.topLeft : Alignment.bottomCenter,
-                child: _getBody(context),
-              ),
+              child: _getBody(context),
             ),
     );
   }
 
   Widget _getBody(BuildContext context) {
-    switch (_pageInd) {
-      case 0:
-        return _selectRC();
-      case 1:
-        return _input3Page1();
-      case 2:
-        return _verificationPage(context);
-      default:
-        return _selectRC();
+    if (_hasSelectedRC) {
+      return _inputData(context);
+    } else {
+      return _selectRC();
     }
   }
 
@@ -119,56 +111,7 @@ class _Input3State extends State<Input3> {
     );
   }
 
-  Widget _input3Page1() {
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.only(
-            left: 20.0,
-            right: 20.0,
-            top: 12.0,
-            bottom: 40.0,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              AppTextField(
-                controller: _dimensionalAccuracyController,
-                errorText: "這是必需的",
-                mainLabel: "尺寸精度",
-                subLabel: "(mm)",
-                dataType: DataType.double,
-              ),
-              const SizedBox(height: 40),
-              AppTextField(
-                controller: _surfaceRoughnessController,
-                errorText: "這是必需的",
-                mainLabel: "表面粗度",
-                subLabel: "(μm)",
-                dataType: DataType.double,
-              ),
-              const SizedBox(height: 40),
-              AppTextField(
-                controller: _runoutController,
-                errorText: "這是必需的",
-                mainLabel: "偏擺",
-                subLabel: "(mm)",
-                dataType: DataType.double,
-              ),
-              const SizedBox(height: 60),
-              AppButton(
-                onPressed: () => _nextPage(),
-                textData: "下一頁",
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _verificationPage(BuildContext context) {
+  Widget _inputData(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
         left: 20.0,
@@ -186,25 +129,57 @@ class _Input3State extends State<Input3> {
                 children: [
                   const SizedBox(height: 20),
                   AppTextField(
-                    controller: _dimensionalAccuracyController,
+                    controller: _maxDimensionalAccuracyController,
                     errorText: "這是必需的",
-                    mainLabel: "尺寸精度",
+                    mainLabel: "最大尺寸",
                     subLabel: "(mm)",
                     dataType: DataType.double,
                   ),
                   const SizedBox(height: 40),
                   AppTextField(
-                    controller: _surfaceRoughnessController,
+                    controller: _minDimensionalAccuracyController,
                     errorText: "這是必需的",
-                    mainLabel: "表面粗度",
+                    mainLabel: "最小尺寸",
+                    subLabel: "(mm)",
+                    dataType: DataType.double,
+                  ),
+                  const SizedBox(height: 40),
+                  AppTextField(
+                    controller: _surfaceRoughness1Controller,
+                    errorText: "這是必需的",
+                    mainLabel: "表粗(前)",
                     subLabel: "(μm)",
                     dataType: DataType.double,
                   ),
                   const SizedBox(height: 40),
                   AppTextField(
-                    controller: _runoutController,
+                    controller: _surfaceRoughness2Controller,
                     errorText: "這是必需的",
-                    mainLabel: "偏擺",
+                    mainLabel: "表粗(中)",
+                    subLabel: "(μm)",
+                    dataType: DataType.double,
+                  ),
+                  const SizedBox(height: 40),
+                  AppTextField(
+                    controller: _surfaceRoughness3Controller,
+                    errorText: "這是必需的",
+                    mainLabel: "表粗(後)",
+                    subLabel: "(μm)",
+                    dataType: DataType.double,
+                  ),
+                  const SizedBox(height: 40),
+                  AppTextField(
+                    controller: _roundnessController,
+                    errorText: "這是必需的",
+                    mainLabel: "圓度",
+                    subLabel: "(mm)",
+                    dataType: DataType.double,
+                  ),
+                  const SizedBox(height: 40),
+                  AppTextField(
+                    controller: _straightnessController,
+                    errorText: "這是必需的",
+                    mainLabel: "直度",
                     subLabel: "(mm)",
                     dataType: DataType.double,
                   ),
