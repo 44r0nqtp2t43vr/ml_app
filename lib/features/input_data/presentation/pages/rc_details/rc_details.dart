@@ -72,8 +72,13 @@ class RCDetails extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     AppLabelledText(
-                      label: "尺寸預留量",
-                      text: selectedRC.dimensionalAllowance.toString(),
+                      label: "最大尺寸預留",
+                      text: selectedRC.maxDimensionalAllowance.toString(),
+                    ),
+                    const SizedBox(height: 20),
+                    AppLabelledText(
+                      label: "最小尺寸預留",
+                      text: selectedRC.minDimensionalAllowance.toString(),
                     ),
                     const SizedBox(height: 20),
                     AppLabelledText(
@@ -97,8 +102,13 @@ class RCDetails extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     AppLabelledText(
-                      label: "主軸轉速",
-                      text: selectedRC.spindleSpeed.toString(),
+                      label: "主軸轉速(粗)",
+                      text: selectedRC.spindleSpeedRough.toString(),
+                    ),
+                    const SizedBox(height: 20),
+                    AppLabelledText(
+                      label: "主軸轉速(精)",
+                      text: selectedRC.spindleSpeedFine.toString(),
                     ),
                     const SizedBox(height: 20),
                     AppLabelledText(

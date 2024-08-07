@@ -7,12 +7,14 @@ const header = [
   "Hardness_1",
   "Hardness_2",
   "Target dimensions",
-  "Dimensional Allowance",
+  "Max Dimensional Allowance",
+  "Min Dimensional Allowance",
   "Measured dimensions",
   "Ambient Humidity",
   "Ambient Temperature",
   "Feed Rate",
-  "Spindle Speed",
+  "Spindle Speed rough",
+  "Spindle Speed fine",
   "Cutting Volume",
   "Spindle Current",
   "Max Dimensional Accuracy",
@@ -33,12 +35,14 @@ class RC {
   String? hardness1;
   String? hardness2;
   double? targetDimensions;
-  double? dimensionalAllowance;
+  double? maxDimensionalAllowance;
+  double? minDimensionalAllowance;
   double? measuredDimensions;
   double? ambientHumidity;
   double? ambientTemperature;
   double? feedRate;
-  double? spindleSpeed;
+  double? spindleSpeedRough;
+  double? spindleSpeedFine;
   double? cuttingVolume;
   double? spindleCurrent;
   double? maxDimensionalAccuracy;
@@ -58,12 +62,14 @@ class RC {
     this.hardness1,
     this.hardness2,
     this.targetDimensions,
-    this.dimensionalAllowance,
+    this.maxDimensionalAllowance,
+    this.minDimensionalAllowance,
     this.measuredDimensions,
     this.ambientHumidity,
     this.ambientTemperature,
     this.feedRate,
-    this.spindleSpeed,
+    this.spindleSpeedRough,
+    this.spindleSpeedFine,
     this.cuttingVolume,
     this.spindleCurrent,
     this.maxDimensionalAccuracy,
@@ -85,12 +91,14 @@ class RC {
       'hardness1': hardness1,
       'hardness2': hardness2,
       'targetDimensions': targetDimensions,
-      'dimensionalAllowance': dimensionalAllowance,
+      'maxDimensionalAllowance': maxDimensionalAllowance,
+      'minDimensionalAllowance': minDimensionalAllowance,
       'measuredDimensions': measuredDimensions,
       'ambientHumidity': ambientHumidity,
       'ambientTemperature': ambientTemperature,
       'feedRate': feedRate,
-      'spindleSpeed': spindleSpeed,
+      'spindleSpeedRough': spindleSpeedRough,
+      'spindleSpeedFine': spindleSpeedFine,
       'cuttingVolume': cuttingVolume,
       'spindleCurrent': spindleCurrent,
       'maxDimensionalAccuracy': maxDimensionalAccuracy,
@@ -113,12 +121,14 @@ class RC {
       hardness1,
       hardness2,
       targetDimensions,
-      dimensionalAllowance,
+      maxDimensionalAllowance,
+      minDimensionalAllowance,
       measuredDimensions,
       ambientHumidity,
       ambientTemperature,
       feedRate,
-      spindleSpeed,
+      spindleSpeedRough,
+      spindleSpeedFine,
       cuttingVolume,
       spindleCurrent,
       maxDimensionalAccuracy,
@@ -142,28 +152,30 @@ RC listToRC(List<dynamic> list) {
     hardness1: list[5].toString(),
     hardness2: list[6].toString(),
     targetDimensions: double.tryParse(list[7].toString()),
-    dimensionalAllowance: double.tryParse(list[8].toString()),
-    measuredDimensions: double.tryParse(list[9].toString()),
-    ambientHumidity: double.tryParse(list[10].toString()),
-    ambientTemperature: double.tryParse(list[11].toString()),
-    feedRate: double.tryParse(list[12].toString()),
-    spindleSpeed: double.tryParse(list[13].toString()),
-    cuttingVolume: double.tryParse(list[14].toString()),
-    spindleCurrent: double.tryParse(list[15].toString()),
-    maxDimensionalAccuracy: double.tryParse(list[16].toString()),
-    minDimensionalAccuracy: double.tryParse(list[17].toString()),
-    surfaceRoughness1: double.tryParse(list[18].toString()),
-    surfaceRoughness2: double.tryParse(list[19].toString()),
-    surfaceRoughness3: double.tryParse(list[20].toString()),
-    roundness: double.tryParse(list[21].toString()),
-    straightness: double.tryParse(list[22].toString()),
+    maxDimensionalAllowance: double.tryParse(list[8].toString()),
+    minDimensionalAllowance: double.tryParse(list[9].toString()),
+    measuredDimensions: double.tryParse(list[10].toString()),
+    ambientHumidity: double.tryParse(list[11].toString()),
+    ambientTemperature: double.tryParse(list[12].toString()),
+    feedRate: double.tryParse(list[13].toString()),
+    spindleSpeedRough: double.tryParse(list[14].toString()),
+    spindleSpeedFine: double.tryParse(list[15].toString()),
+    cuttingVolume: double.tryParse(list[16].toString()),
+    spindleCurrent: double.tryParse(list[17].toString()),
+    maxDimensionalAccuracy: double.tryParse(list[18].toString()),
+    minDimensionalAccuracy: double.tryParse(list[19].toString()),
+    surfaceRoughness1: double.tryParse(list[20].toString()),
+    surfaceRoughness2: double.tryParse(list[21].toString()),
+    surfaceRoughness3: double.tryParse(list[22].toString()),
+    roundness: double.tryParse(list[23].toString()),
+    straightness: double.tryParse(list[24].toString()),
   );
 }
 
 bool isListIncompForI2(List<dynamic> list) {
-  return list[12] == '' || list[13] == '' || list[14] == '' || list[15] == '';
+  return list[13] == '' || list[14] == '' || list[15] == '' || list[16] == '' || list[17] == '';
 }
 
 bool isListIncompForI3(List<dynamic> list) {
-  return list[16] == '' || list[17] == '' || list[18] == '' || list[19] == '' || list[20] == '' || list[21] == '' || list[22] == '';
+  return list[18] == '' || list[19] == '' || list[20] == '' || list[21] == '' || list[22] == '' || list[23] == '' || list[24] == '';
 }

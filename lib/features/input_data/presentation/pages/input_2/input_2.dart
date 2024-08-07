@@ -22,7 +22,8 @@ class _Input2State extends State<Input2> {
 
   final _formKey = GlobalKey<FormState>();
   final _feedRateController = TextEditingController();
-  final _spindleSpeedController = TextEditingController();
+  final _spindleSpeedRoughController = TextEditingController();
+  final _spindleSpeedFineController = TextEditingController();
   final _cuttingVolumeController = TextEditingController();
   final _spindleCurrentController = TextEditingController();
 
@@ -46,7 +47,8 @@ class _Input2State extends State<Input2> {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _selectedRC.feedRate = double.parse(_feedRateController.text.trim());
-        _selectedRC.spindleSpeed = double.parse(_spindleSpeedController.text.trim());
+        _selectedRC.spindleSpeedRough = double.parse(_spindleSpeedRoughController.text.trim());
+        _selectedRC.spindleSpeedFine = double.parse(_spindleSpeedFineController.text.trim());
         _selectedRC.cuttingVolume = double.parse(_cuttingVolumeController.text.trim());
         _selectedRC.spindleCurrent = double.parse(_spindleCurrentController.text.trim());
         _isLoadingRCs = true;
@@ -131,9 +133,17 @@ class _Input2State extends State<Input2> {
                   ),
                   const SizedBox(height: 40),
                   AppTextField(
-                    controller: _spindleSpeedController,
+                    controller: _spindleSpeedRoughController,
                     errorText: "這是必需的",
-                    mainLabel: "主軸轉速",
+                    mainLabel: "主軸轉速(粗)",
+                    subLabel: "(rpm)",
+                    dataType: DataType.double,
+                  ),
+                  const SizedBox(height: 40),
+                  AppTextField(
+                    controller: _spindleSpeedFineController,
+                    errorText: "這是必需的",
+                    mainLabel: "主軸轉速(精)",
                     subLabel: "(rpm)",
                     dataType: DataType.double,
                   ),

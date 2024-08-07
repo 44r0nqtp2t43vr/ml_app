@@ -23,7 +23,8 @@ class _Input1State extends State<Input1> {
   final _hardness1Controller = TextEditingController();
   final _hardness2Controller = TextEditingController();
   final _targetDimensionsController = TextEditingController();
-  final _dimensionalAllowanceController = TextEditingController();
+  final _maxDimensionalAllowanceController = TextEditingController();
+  final _minDimensionalAllowanceController = TextEditingController();
   final _measuredDimensionsController = TextEditingController();
   final _ambientHumidityController = TextEditingController();
   final _ambientTemperatureController = TextEditingController();
@@ -38,7 +39,8 @@ class _Input1State extends State<Input1> {
         _newRC.hardness1 = _hardness1Controller.text.trim();
         _newRC.hardness2 = _hardness2Controller.text.trim();
         _newRC.targetDimensions = double.parse(_targetDimensionsController.text.trim());
-        _newRC.dimensionalAllowance = double.parse(_dimensionalAllowanceController.text.trim());
+        _newRC.maxDimensionalAllowance = double.parse(_maxDimensionalAllowanceController.text.trim());
+        _newRC.minDimensionalAllowance = double.parse(_minDimensionalAllowanceController.text.trim());
         _newRC.measuredDimensions = double.parse(_measuredDimensionsController.text.trim());
         _newRC.ambientHumidity = double.parse(_ambientHumidityController.text.trim());
         _newRC.ambientTemperature = double.parse(_ambientTemperatureController.text.trim());
@@ -116,9 +118,17 @@ class _Input1State extends State<Input1> {
                       ),
                       const SizedBox(height: 40),
                       AppTextField(
-                        controller: _dimensionalAllowanceController,
+                        controller: _maxDimensionalAllowanceController,
                         errorText: "這是必需的",
-                        mainLabel: "尺寸預留量",
+                        mainLabel: "最大尺寸預留",
+                        subLabel: "(mm)",
+                        dataType: DataType.double,
+                      ),
+                      const SizedBox(height: 40),
+                      AppTextField(
+                        controller: _minDimensionalAllowanceController,
+                        errorText: "這是必需的",
+                        mainLabel: "最小尺寸預留",
                         subLabel: "(mm)",
                         dataType: DataType.double,
                       ),
