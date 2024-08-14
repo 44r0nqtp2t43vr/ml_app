@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ml_app/core/controllers/files_controller.dart';
 import 'package:ml_app/core/widgets/app_button.dart';
@@ -14,6 +15,8 @@ class Input1 extends StatefulWidget {
 
 class _Input1State extends State<Input1> {
   final RC _newRC = RC();
+  bool _isLoadingRCs = true;
+  List<dynamic> _existingRCs = [];
 
   final _formKey = GlobalKey<FormState>();
   final _rcnoController = TextEditingController();
@@ -28,6 +31,15 @@ class _Input1State extends State<Input1> {
   final _measuredDimensionsController = TextEditingController();
   final _ambientHumidityController = TextEditingController();
   final _ambientTemperatureController = TextEditingController();
+
+  Future<void> _initializeRCs() async {
+    sl<FilesController>().getRCsList(ForScreen.input1).then((value) {
+      setState(() {
+        _existingRCs = value;
+        _isLoadingRCs = false;
+      });
+    });
+  }
 
   void _saveData(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
@@ -53,121 +65,137 @@ class _Input1State extends State<Input1> {
   }
 
   @override
+  void initState() {
+    _initializeRCs();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Form(
         key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.only(
-            left: 20.0,
-            right: 20.0,
-            top: 12.0,
-            bottom: 40.0,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 20),
-                      AppTextField(
-                        controller: _rcnoController,
-                        errorText: "這是必需的",
-                        mainLabel: "批號",
+        child: _isLoadingRCs
+            ? const Center(
+                child: CupertinoActivityIndicator(),
+              )
+            : Padding(
+                padding: const EdgeInsets.only(
+                  left: 20.0,
+                  right: 20.0,
+                  top: 12.0,
+                  bottom: 40.0,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 20),
+                            AppTextField(
+                              controller: _rcnoController,
+                              errorText: "這是必需的",
+                              mainLabel: "批號",
+                              specialValidator: () {
+                                if (_existingRCs.any((rc) => rc.rcno!.toUpperCase() == _rcnoController.text.trim().toUpperCase())) {
+                                  return "這個條目已經存在";
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 40),
+                            AppTextField(
+                              controller: _machineController,
+                              errorText: "這是必需的",
+                              mainLabel: "機台",
+                            ),
+                            const SizedBox(height: 40),
+                            AppTextField(
+                              controller: _materialController,
+                              errorText: "這是必需的",
+                              mainLabel: "材料",
+                            ),
+                            const SizedBox(height: 40),
+                            AppTextField(
+                              controller: _supplierController,
+                              errorText: "這是必需的",
+                              mainLabel: "供應商",
+                            ),
+                            const SizedBox(height: 40),
+                            AppTextField(
+                              controller: _hardness1Controller,
+                              errorText: "這是必需的",
+                              mainLabel: "硬度(前)",
+                            ),
+                            const SizedBox(height: 40),
+                            AppTextField(
+                              controller: _hardness2Controller,
+                              errorText: "這是必需的",
+                              mainLabel: "硬度(後)",
+                            ),
+                            const SizedBox(height: 40),
+                            AppTextField(
+                              controller: _targetDimensionsController,
+                              errorText: "這是必需的",
+                              mainLabel: "圖面尺寸",
+                              subLabel: "(mm)",
+                              dataType: DataType.double,
+                            ),
+                            const SizedBox(height: 40),
+                            AppTextField(
+                              controller: _maxDimensionalAllowanceController,
+                              errorText: "這是必需的",
+                              mainLabel: "最大尺寸預留",
+                              subLabel: "(mm)",
+                              dataType: DataType.double,
+                            ),
+                            const SizedBox(height: 40),
+                            AppTextField(
+                              controller: _minDimensionalAllowanceController,
+                              errorText: "這是必需的",
+                              mainLabel: "最小尺寸預留",
+                              subLabel: "(mm)",
+                              dataType: DataType.double,
+                            ),
+                            const SizedBox(height: 40),
+                            AppTextField(
+                              controller: _measuredDimensionsController,
+                              errorText: "這是必需的",
+                              mainLabel: "材料尺寸",
+                              subLabel: "(mm)",
+                              dataType: DataType.double,
+                            ),
+                            const SizedBox(height: 40),
+                            AppTextField(
+                              controller: _ambientHumidityController,
+                              errorText: "這是必需的",
+                              mainLabel: "環境濕度",
+                              subLabel: "(%)",
+                              dataType: DataType.double,
+                            ),
+                            const SizedBox(height: 40),
+                            AppTextField(
+                              controller: _ambientTemperatureController,
+                              errorText: "這是必需的",
+                              mainLabel: "環境溫度",
+                              subLabel: "(°C)",
+                              dataType: DataType.double,
+                            ),
+                          ],
+                        ),
                       ),
-                      const SizedBox(height: 40),
-                      AppTextField(
-                        controller: _machineController,
-                        errorText: "這是必需的",
-                        mainLabel: "機台",
-                      ),
-                      const SizedBox(height: 40),
-                      AppTextField(
-                        controller: _materialController,
-                        errorText: "這是必需的",
-                        mainLabel: "材料",
-                      ),
-                      const SizedBox(height: 40),
-                      AppTextField(
-                        controller: _supplierController,
-                        errorText: "這是必需的",
-                        mainLabel: "供應商",
-                      ),
-                      const SizedBox(height: 40),
-                      AppTextField(
-                        controller: _hardness1Controller,
-                        errorText: "這是必需的",
-                        mainLabel: "硬度(前)",
-                      ),
-                      const SizedBox(height: 40),
-                      AppTextField(
-                        controller: _hardness2Controller,
-                        errorText: "這是必需的",
-                        mainLabel: "硬度(後)",
-                      ),
-                      const SizedBox(height: 40),
-                      AppTextField(
-                        controller: _targetDimensionsController,
-                        errorText: "這是必需的",
-                        mainLabel: "圖面尺寸",
-                        subLabel: "(mm)",
-                        dataType: DataType.double,
-                      ),
-                      const SizedBox(height: 40),
-                      AppTextField(
-                        controller: _maxDimensionalAllowanceController,
-                        errorText: "這是必需的",
-                        mainLabel: "最大尺寸預留",
-                        subLabel: "(mm)",
-                        dataType: DataType.double,
-                      ),
-                      const SizedBox(height: 40),
-                      AppTextField(
-                        controller: _minDimensionalAllowanceController,
-                        errorText: "這是必需的",
-                        mainLabel: "最小尺寸預留",
-                        subLabel: "(mm)",
-                        dataType: DataType.double,
-                      ),
-                      const SizedBox(height: 40),
-                      AppTextField(
-                        controller: _measuredDimensionsController,
-                        errorText: "這是必需的",
-                        mainLabel: "材料尺寸",
-                        subLabel: "(mm)",
-                        dataType: DataType.double,
-                      ),
-                      const SizedBox(height: 40),
-                      AppTextField(
-                        controller: _ambientHumidityController,
-                        errorText: "這是必需的",
-                        mainLabel: "環境濕度",
-                        subLabel: "(%)",
-                        dataType: DataType.double,
-                      ),
-                      const SizedBox(height: 40),
-                      AppTextField(
-                        controller: _ambientTemperatureController,
-                        errorText: "這是必需的",
-                        mainLabel: "環境溫度",
-                        subLabel: "(°C)",
-                        dataType: DataType.double,
-                      ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 40),
+                    AppButton(
+                      onPressed: () => _saveData(context),
+                      textData: "儲存",
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 40),
-              AppButton(
-                onPressed: () => _saveData(context),
-                textData: "儲存",
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

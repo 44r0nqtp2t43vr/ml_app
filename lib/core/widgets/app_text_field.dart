@@ -8,6 +8,7 @@ class AppTextField extends StatelessWidget {
   final String mainLabel;
   final String? subLabel;
   final DataType dataType;
+  final String? Function()? specialValidator;
 
   const AppTextField({
     super.key,
@@ -16,6 +17,7 @@ class AppTextField extends StatelessWidget {
     required this.mainLabel,
     this.subLabel,
     this.dataType = DataType.string,
+    this.specialValidator,
   });
 
   @override
@@ -88,7 +90,12 @@ class AppTextField extends StatelessWidget {
                 return errorText;
               }
             }
-            return null;
+
+            if (specialValidator != null) {
+              return specialValidator!();
+            } else {
+              return null;
+            }
           },
         ),
       ],

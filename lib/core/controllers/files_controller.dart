@@ -7,7 +7,7 @@ import 'package:ml_app/features/input_data/domain/rc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-enum ForScreen { input2, input3, history }
+enum ForScreen { input1, input2, input3, history }
 
 class FilesController extends GetxController {
   Future<bool> _requestPermission(Permission permission) async {
@@ -124,7 +124,7 @@ class FilesController extends GetxController {
 
   Future<List<RC>> getRCsList(ForScreen forScreen) async {
     final lists = await readCsvFromDirectory();
-    if (forScreen == ForScreen.history) {
+    if (forScreen == ForScreen.history || forScreen == ForScreen.input1) {
       return lists.map((list) => listToRC(list)).toList();
     } else if (forScreen == ForScreen.input2) {
       final incompsForI2 = lists.where((list) => isListIncompForI2(list)).toList();
