@@ -7,8 +7,6 @@ import 'package:ml_app/features/input_data/domain/rc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-enum ForScreen { input1, input2, input3, history }
-
 class FilesController extends GetxController {
   Future<bool> _requestPermission(Permission permission) async {
     if (await permission.isGranted) {
@@ -32,7 +30,7 @@ class FilesController extends GetxController {
     return null;
   }
 
-  Future<void> writeCsvToDirectory(RC data, {bool isEdit = false}) async {
+  Future<void> writeCsvToDirectory(RC data, {String? oldRcno}) async {
     final today = DateTime.now();
     final oldDate = data.date;
     data.date = dateTimeToString(today);
@@ -44,12 +42,12 @@ class FilesController extends GetxController {
 
     final file = File('$directoryPath/${dateTimeToFilename(today)}.csv');
     try {
-      if (isEdit) {
+      if (oldRcno != null) {
         if (stringToFilename(oldDate!) == stringToFilename(data.date!)) {
           // if same month as old row, simply edit the row
           final csvData = await file.readAsString();
           List<List<dynamic>> rows = const CsvToListConverter().convert(csvData);
-          final indexToEdit = rows.indexWhere((row) => row[0].toString() == data.rcno);
+          final indexToEdit = rows.indexWhere((row) => row[0].toString() == oldRcno);
           rows[indexToEdit] = data.toList();
           String csvDataUpdated = const ListToCsvConverter().convert(rows, convertNullTo: '');
           await file.writeAsString(csvDataUpdated);
@@ -58,7 +56,7 @@ class FilesController extends GetxController {
           final oldFile = File('$directoryPath/${stringToFilename(oldDate)}.csv');
           final oldCsvData = await oldFile.readAsString();
           List<List<dynamic>> oldRows = const CsvToListConverter().convert(oldCsvData);
-          oldRows.removeWhere((row) => row[0].toString() == data.rcno);
+          oldRows.removeWhere((row) => row[0].toString() == oldRcno);
           String csvDataUpdated = const ListToCsvConverter().convert(oldRows, convertNullTo: '');
           await oldFile.writeAsString(csvDataUpdated);
 
@@ -122,17 +120,8 @@ class FilesController extends GetxController {
     return allRows;
   }
 
-  Future<List<RC>> getRCsList(ForScreen forScreen) async {
+  Future<List<RC>> getRCsList() async {
     final lists = await readCsvFromDirectory();
-    if (forScreen == ForScreen.history || forScreen == ForScreen.input1) {
-      return lists.map((list) => listToRC(list)).toList();
-    } else if (forScreen == ForScreen.input2) {
-      final incompsForI2 = lists.where((list) => isListIncompForI2(list)).toList();
-      return incompsForI2.map((list) => listToRC(list)).toList();
-    } else if (forScreen == ForScreen.input3) {
-      final incompsForI3 = lists.where((list) => isListIncompForI3(list)).toList();
-      return incompsForI3.map((list) => listToRC(list)).toList();
-    }
-    return [];
+    return lists.map((list) => listToRC(list)).toList();
   }
 }

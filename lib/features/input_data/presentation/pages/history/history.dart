@@ -18,7 +18,7 @@ class _HistoryState extends State<History> {
   List<dynamic> _allRCs = [];
 
   Future<void> _initializeRCs() async {
-    sl<FilesController>().getRCsList(ForScreen.history).then((value) {
+    sl<FilesController>().getRCsList().then((value) {
       setState(() {
         _allRCs = value;
         _isLoadingRCs = false;

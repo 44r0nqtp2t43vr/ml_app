@@ -6,14 +6,14 @@ import 'package:ml_app/core/widgets/app_text_field.dart';
 import 'package:ml_app/features/input_data/domain/rc.dart';
 import 'package:ml_app/injection_container.dart';
 
-class Input1 extends StatefulWidget {
-  const Input1({super.key});
+class Input extends StatefulWidget {
+  const Input({super.key});
 
   @override
-  State<Input1> createState() => _Input1State();
+  State<Input> createState() => _InputState();
 }
 
-class _Input1State extends State<Input1> {
+class _InputState extends State<Input> {
   final RC _newRC = RC();
   bool _isLoadingRCs = true;
   List<dynamic> _existingRCs = [];
@@ -31,9 +31,21 @@ class _Input1State extends State<Input1> {
   final _measuredDimensionsController = TextEditingController();
   final _ambientHumidityController = TextEditingController();
   final _ambientTemperatureController = TextEditingController();
+  final _feedRateController = TextEditingController();
+  final _spindleSpeedRoughController = TextEditingController();
+  final _spindleSpeedFineController = TextEditingController();
+  final _cuttingVolumeController = TextEditingController();
+  final _spindleCurrentController = TextEditingController();
+  final _maxDimensionalAccuracyController = TextEditingController();
+  final _minDimensionalAccuracyController = TextEditingController();
+  final _surfaceRoughness1Controller = TextEditingController();
+  final _surfaceRoughness2Controller = TextEditingController();
+  final _surfaceRoughness3Controller = TextEditingController();
+  final _roundnessController = TextEditingController();
+  final _straightnessController = TextEditingController();
 
   Future<void> _initializeRCs() async {
-    sl<FilesController>().getRCsList(ForScreen.input1).then((value) {
+    sl<FilesController>().getRCsList().then((value) {
       setState(() {
         _existingRCs = value;
         _isLoadingRCs = false;
@@ -56,6 +68,18 @@ class _Input1State extends State<Input1> {
         _newRC.measuredDimensions = double.parse(_measuredDimensionsController.text.trim());
         _newRC.ambientHumidity = double.parse(_ambientHumidityController.text.trim());
         _newRC.ambientTemperature = double.parse(_ambientTemperatureController.text.trim());
+        _newRC.feedRate = double.parse(_feedRateController.text.trim());
+        _newRC.spindleSpeedRough = double.parse(_spindleSpeedRoughController.text.trim());
+        _newRC.spindleSpeedFine = double.parse(_spindleSpeedFineController.text.trim());
+        _newRC.cuttingVolume = double.parse(_cuttingVolumeController.text.trim());
+        _newRC.spindleCurrent = double.parse(_spindleCurrentController.text.trim());
+        _newRC.maxDimensionalAccuracy = double.parse(_maxDimensionalAccuracyController.text.trim());
+        _newRC.minDimensionalAccuracy = double.parse(_minDimensionalAccuracyController.text.trim());
+        _newRC.surfaceRoughness1 = double.parse(_surfaceRoughness1Controller.text.trim());
+        _newRC.surfaceRoughness2 = double.parse(_surfaceRoughness2Controller.text.trim());
+        _newRC.surfaceRoughness3 = double.parse(_surfaceRoughness3Controller.text.trim());
+        _newRC.roundness = double.parse(_roundnessController.text.trim());
+        _newRC.straightness = double.parse(_straightnessController.text.trim());
       });
 
       sl<FilesController>().writeCsvToDirectory(_newRC).then((value) {
@@ -182,6 +206,102 @@ class _Input1State extends State<Input1> {
                               errorText: "這是必需的",
                               mainLabel: "環境溫度",
                               subLabel: "(°C)",
+                              dataType: DataType.double,
+                            ),
+                            const SizedBox(height: 40),
+                            AppTextField(
+                              controller: _feedRateController,
+                              errorText: "這是必需的",
+                              mainLabel: "進給量",
+                              subLabel: "(m/min)",
+                              dataType: DataType.double,
+                            ),
+                            const SizedBox(height: 40),
+                            AppTextField(
+                              controller: _spindleSpeedRoughController,
+                              errorText: "這是必需的",
+                              mainLabel: "主軸轉速(粗)",
+                              subLabel: "(rpm)",
+                              dataType: DataType.double,
+                            ),
+                            const SizedBox(height: 40),
+                            AppTextField(
+                              controller: _spindleSpeedFineController,
+                              errorText: "這是必需的",
+                              mainLabel: "主軸轉速(精)",
+                              subLabel: "(rpm)",
+                              dataType: DataType.double,
+                            ),
+                            const SizedBox(height: 40),
+                            AppTextField(
+                              controller: _cuttingVolumeController,
+                              errorText: "這是必需的",
+                              mainLabel: "切削量",
+                              subLabel: "(mm)",
+                              dataType: DataType.double,
+                            ),
+                            const SizedBox(height: 40),
+                            AppTextField(
+                              controller: _spindleCurrentController,
+                              errorText: "這是必需的",
+                              mainLabel: "主軸電流",
+                              subLabel: "(A)",
+                              dataType: DataType.double,
+                            ),
+                            const SizedBox(height: 40),
+                            AppTextField(
+                              controller: _maxDimensionalAccuracyController,
+                              errorText: "這是必需的",
+                              mainLabel: "最大尺寸",
+                              subLabel: "(mm)",
+                              dataType: DataType.double,
+                            ),
+                            const SizedBox(height: 40),
+                            AppTextField(
+                              controller: _minDimensionalAccuracyController,
+                              errorText: "這是必需的",
+                              mainLabel: "最小尺寸",
+                              subLabel: "(mm)",
+                              dataType: DataType.double,
+                            ),
+                            const SizedBox(height: 40),
+                            AppTextField(
+                              controller: _surfaceRoughness1Controller,
+                              errorText: "這是必需的",
+                              mainLabel: "表粗(前)",
+                              subLabel: "(μm)",
+                              dataType: DataType.double,
+                            ),
+                            const SizedBox(height: 40),
+                            AppTextField(
+                              controller: _surfaceRoughness2Controller,
+                              errorText: "這是必需的",
+                              mainLabel: "表粗(中)",
+                              subLabel: "(μm)",
+                              dataType: DataType.double,
+                            ),
+                            const SizedBox(height: 40),
+                            AppTextField(
+                              controller: _surfaceRoughness3Controller,
+                              errorText: "這是必需的",
+                              mainLabel: "表粗(後)",
+                              subLabel: "(μm)",
+                              dataType: DataType.double,
+                            ),
+                            const SizedBox(height: 40),
+                            AppTextField(
+                              controller: _roundnessController,
+                              errorText: "這是必需的",
+                              mainLabel: "圓度",
+                              subLabel: "(mm)",
+                              dataType: DataType.double,
+                            ),
+                            const SizedBox(height: 40),
+                            AppTextField(
+                              controller: _straightnessController,
+                              errorText: "這是必需的",
+                              mainLabel: "直度",
+                              subLabel: "(mm)",
                               dataType: DataType.double,
                             ),
                           ],

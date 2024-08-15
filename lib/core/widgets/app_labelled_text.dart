@@ -22,7 +22,6 @@ class AppLabelledText extends StatelessWidget {
           label,
           style: const TextStyle(
             fontSize: fontSize,
-            fontWeight: FontWeight.bold,
           ),
         ),
         Text(

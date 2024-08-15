@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 
 class AppButton extends StatelessWidget {
   final Function() onPressed;
+  final Function()? onLongPressed;
   final String textData;
 
-  const AppButton({super.key, required this.onPressed, required this.textData});
+  const AppButton({super.key, required this.onPressed, this.onLongPressed, required this.textData});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
+      onLongPress: onLongPressed,
       style: ElevatedButton.styleFrom(
         minimumSize: const Size(double.infinity, 60),
         maximumSize: const Size(double.infinity, 60),
