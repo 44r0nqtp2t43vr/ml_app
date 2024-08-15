@@ -14,16 +14,31 @@ class History extends StatefulWidget {
 }
 
 class _HistoryState extends State<History> {
+  int _toDeleteIndex = -1;
   bool _isLoadingRCs = true;
   List<dynamic> _allRCs = [];
+
+  void _setDeleteIndex(int index) {
+    setState(() {
+      _toDeleteIndex = index;
+    });
+  }
 
   Future<void> _initializeRCs() async {
     sl<FilesController>().getRCsList().then((value) {
       setState(() {
         _allRCs = value;
+        _toDeleteIndex = -1;
         _isLoadingRCs = false;
       });
     });
+  }
+
+  void _deleteRC(BuildContext context) async {
+    setState(() {
+      _isLoadingRCs = true;
+    });
+    sl<FilesController>().deleteRowFromCsv(_allRCs[_toDeleteIndex]).then((value) => _initializeRCs());
   }
 
   @override
@@ -34,27 +49,50 @@ class _HistoryState extends State<History> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _isLoadingRCs
-          ? const Center(
-              child: CupertinoActivityIndicator(),
-            )
-          : Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: AppListView(
-                title: "批號",
-                itemCount: _allRCs.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: AppButton(
-                      onPressed: () => _onSelectRC(context, _allRCs[index]),
-                      textData: _allRCs[index].rcno!,
-                    ),
-                  );
-                },
+    return GestureDetector(
+      onTap: () => _setDeleteIndex(-1),
+      child: Scaffold(
+        body: _isLoadingRCs
+            ? const Center(
+                child: CupertinoActivityIndicator(),
+              )
+            : Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: AppListView(
+                  title: "批號",
+                  itemCount: _allRCs.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: AppButton(
+                            onPressed: () => _onSelectRC(context, _allRCs[index]),
+                            onLongPressed: () => _setDeleteIndex(index),
+                            textData: _allRCs[index].rcno!,
+                          ),
+                        ),
+                        if (_toDeleteIndex == index)
+                          Positioned(
+                            right: 0,
+                            top: 0,
+                            child: FloatingActionButton.extended(
+                              backgroundColor: Colors.red,
+                              onPressed: () => _deleteRC(context),
+                              label: const Text(
+                                "刪除",
+                                style: TextStyle(
+                                  fontSize: 40,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    );
+                  },
+                ),
               ),
-            ),
+      ),
     );
   }
 

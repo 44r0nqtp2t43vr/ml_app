@@ -47,7 +47,7 @@ class FilesController extends GetxController {
           // if same month as old row, simply edit the row
           final csvData = await file.readAsString();
           List<List<dynamic>> rows = const CsvToListConverter().convert(csvData);
-          final indexToEdit = rows.indexWhere((row) => row[0].toString() == oldRcno);
+          final indexToEdit = rows.indexWhere((row) => row[0].toString() == oldRcno, 1);
           rows[indexToEdit] = data.toList();
           String csvDataUpdated = const ListToCsvConverter().convert(rows, convertNullTo: '');
           await file.writeAsString(csvDataUpdated);
@@ -56,7 +56,8 @@ class FilesController extends GetxController {
           final oldFile = File('$directoryPath/${stringToFilename(oldDate)}.csv');
           final oldCsvData = await oldFile.readAsString();
           List<List<dynamic>> oldRows = const CsvToListConverter().convert(oldCsvData);
-          oldRows.removeWhere((row) => row[0].toString() == oldRcno);
+          final indexToRemove = oldRows.indexWhere((row) => row[0].toString() == oldRcno, 1);
+          oldRows.removeAt(indexToRemove);
           String csvDataUpdated = const ListToCsvConverter().convert(oldRows, convertNullTo: '');
           await oldFile.writeAsString(csvDataUpdated);
 
@@ -123,5 +124,28 @@ class FilesController extends GetxController {
   Future<List<RC>> getRCsList() async {
     final lists = await readCsvFromDirectory();
     return lists.map((list) => listToRC(list)).toList();
+  }
+
+  Future<void> deleteRowFromCsv(RC data) async {
+    final directoryPath = await getExternalSdCardPath();
+    if (directoryPath == null) {
+      return;
+    }
+
+    final directory = Directory(directoryPath);
+    if (!await directory.exists()) {
+      return;
+    }
+
+    final file = File('$directoryPath/${stringToFilename(data.date!)}.csv');
+
+    final csvData = await file.readAsString();
+    List<List<dynamic>> rows = const CsvToListConverter().convert(csvData);
+
+    final indexToDelete = rows.indexWhere((row) => row[0].toString() == data.rcno.toString(), 1);
+    rows.removeAt(indexToDelete);
+
+    String csvDataUpdated = const ListToCsvConverter().convert(rows, convertNullTo: '');
+    await file.writeAsString(csvDataUpdated);
   }
 }
