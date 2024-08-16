@@ -8,6 +8,7 @@ class AppTextField extends StatelessWidget {
   final String mainLabel;
   final String? subLabel;
   final DataType dataType;
+  final bool required;
   final String? Function()? specialValidator;
 
   const AppTextField({
@@ -17,6 +18,7 @@ class AppTextField extends StatelessWidget {
     required this.mainLabel,
     this.subLabel,
     this.dataType = DataType.string,
+    this.required = false,
     this.specialValidator,
   });
 
@@ -82,11 +84,11 @@ class AppTextField extends StatelessWidget {
           ),
           validator: (value) {
             if (dataType == DataType.string) {
-              if (value == null || value.trim().isEmpty) {
+              if (required && (value == null || value.trim().isEmpty)) {
                 return errorText;
               }
             } else {
-              if (value == null || value.trim().isEmpty || double.tryParse(value.trim()) == null) {
+              if ((required && (value == null || value.trim().isEmpty)) || (value != null && value.trim().isNotEmpty && double.tryParse(value.trim()) == null)) {
                 return errorText;
               }
             }

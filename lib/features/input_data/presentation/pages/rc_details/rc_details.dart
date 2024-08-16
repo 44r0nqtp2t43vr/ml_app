@@ -57,6 +57,10 @@ class _RCDetailsState extends State<RCDetails> {
     });
   }
 
+  double? _saveDoubleData(String data) {
+    return data.isEmpty ? null : double.parse(data);
+  }
+
   void _saveData(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       setState(() {
@@ -66,24 +70,24 @@ class _RCDetailsState extends State<RCDetails> {
         _selectedRC.supplier = _supplierController.text.trim();
         _selectedRC.hardness1 = _hardness1Controller.text.trim();
         _selectedRC.hardness2 = _hardness2Controller.text.trim();
-        _selectedRC.targetDimensions = double.parse(_targetDimensionsController.text.trim());
-        _selectedRC.maxDimensionalAllowance = double.parse(_maxDimensionalAllowanceController.text.trim());
-        _selectedRC.minDimensionalAllowance = double.parse(_minDimensionalAllowanceController.text.trim());
-        _selectedRC.measuredDimensions = double.parse(_measuredDimensionsController.text.trim());
-        _selectedRC.ambientHumidity = double.parse(_ambientHumidityController.text.trim());
-        _selectedRC.ambientTemperature = double.parse(_ambientTemperatureController.text.trim());
-        _selectedRC.feedRate = double.parse(_feedRateController.text.trim());
-        _selectedRC.spindleSpeedRough = double.parse(_spindleSpeedRoughController.text.trim());
-        _selectedRC.spindleSpeedFine = double.parse(_spindleSpeedFineController.text.trim());
-        _selectedRC.cuttingVolume = double.parse(_cuttingVolumeController.text.trim());
-        _selectedRC.spindleCurrent = double.parse(_spindleCurrentController.text.trim());
-        _selectedRC.maxDimensionalAccuracy = double.parse(_maxDimensionalAccuracyController.text.trim());
-        _selectedRC.minDimensionalAccuracy = double.parse(_minDimensionalAccuracyController.text.trim());
-        _selectedRC.surfaceRoughness1 = double.parse(_surfaceRoughness1Controller.text.trim());
-        _selectedRC.surfaceRoughness2 = double.parse(_surfaceRoughness2Controller.text.trim());
-        _selectedRC.surfaceRoughness3 = double.parse(_surfaceRoughness3Controller.text.trim());
-        _selectedRC.roundness = double.parse(_roundnessController.text.trim());
-        _selectedRC.straightness = double.parse(_straightnessController.text.trim());
+        _selectedRC.targetDimensions = _saveDoubleData(_targetDimensionsController.text.trim());
+        _selectedRC.maxDimensionalAllowance = _saveDoubleData(_maxDimensionalAllowanceController.text.trim());
+        _selectedRC.minDimensionalAllowance = _saveDoubleData(_minDimensionalAllowanceController.text.trim());
+        _selectedRC.measuredDimensions = _saveDoubleData(_measuredDimensionsController.text.trim());
+        _selectedRC.ambientHumidity = _saveDoubleData(_ambientHumidityController.text.trim());
+        _selectedRC.ambientTemperature = _saveDoubleData(_ambientTemperatureController.text.trim());
+        _selectedRC.feedRate = _saveDoubleData(_feedRateController.text.trim());
+        _selectedRC.spindleSpeedRough = _saveDoubleData(_spindleSpeedRoughController.text.trim());
+        _selectedRC.spindleSpeedFine = _saveDoubleData(_spindleSpeedFineController.text.trim());
+        _selectedRC.cuttingVolume = _saveDoubleData(_cuttingVolumeController.text.trim());
+        _selectedRC.spindleCurrent = _saveDoubleData(_spindleCurrentController.text.trim());
+        _selectedRC.maxDimensionalAccuracy = _saveDoubleData(_maxDimensionalAccuracyController.text.trim());
+        _selectedRC.minDimensionalAccuracy = _saveDoubleData(_minDimensionalAccuracyController.text.trim());
+        _selectedRC.surfaceRoughness1 = _saveDoubleData(_surfaceRoughness1Controller.text.trim());
+        _selectedRC.surfaceRoughness2 = _saveDoubleData(_surfaceRoughness2Controller.text.trim());
+        _selectedRC.surfaceRoughness3 = _saveDoubleData(_surfaceRoughness3Controller.text.trim());
+        _selectedRC.roundness = _saveDoubleData(_roundnessController.text.trim());
+        _selectedRC.straightness = _saveDoubleData(_straightnessController.text.trim());
       });
 
       sl<FilesController>().writeCsvToDirectory(_selectedRC, oldRcno: _oldRcno).then((value) {
@@ -92,34 +96,38 @@ class _RCDetailsState extends State<RCDetails> {
     }
   }
 
+  String _initializeTextController(dynamic property) {
+    return property == null ? '' : property.toString();
+  }
+
   @override
   void initState() {
     _selectedRC = widget.selectedRC;
     _oldRcno = widget.selectedRC.rcno.toString();
-    _rcnoController.text = widget.selectedRC.rcno.toString();
-    _machineController.text = widget.selectedRC.machine.toString();
-    _materialController.text = widget.selectedRC.material.toString();
-    _supplierController.text = widget.selectedRC.supplier.toString();
-    _hardness1Controller.text = widget.selectedRC.hardness1.toString();
-    _hardness2Controller.text = widget.selectedRC.hardness2.toString();
-    _targetDimensionsController.text = widget.selectedRC.targetDimensions.toString();
-    _maxDimensionalAllowanceController.text = widget.selectedRC.maxDimensionalAllowance.toString();
-    _minDimensionalAllowanceController.text = widget.selectedRC.minDimensionalAllowance.toString();
-    _measuredDimensionsController.text = widget.selectedRC.measuredDimensions.toString();
-    _ambientHumidityController.text = widget.selectedRC.ambientHumidity.toString();
-    _ambientTemperatureController.text = widget.selectedRC.ambientTemperature.toString();
-    _feedRateController.text = widget.selectedRC.feedRate.toString();
-    _spindleSpeedRoughController.text = widget.selectedRC.spindleSpeedRough.toString();
-    _spindleSpeedFineController.text = widget.selectedRC.spindleSpeedFine.toString();
-    _cuttingVolumeController.text = widget.selectedRC.cuttingVolume.toString();
-    _spindleCurrentController.text = widget.selectedRC.spindleCurrent.toString();
-    _maxDimensionalAccuracyController.text = widget.selectedRC.maxDimensionalAccuracy.toString();
-    _minDimensionalAccuracyController.text = widget.selectedRC.minDimensionalAccuracy.toString();
-    _surfaceRoughness1Controller.text = widget.selectedRC.surfaceRoughness1.toString();
-    _surfaceRoughness2Controller.text = widget.selectedRC.surfaceRoughness2.toString();
-    _surfaceRoughness3Controller.text = widget.selectedRC.surfaceRoughness3.toString();
-    _roundnessController.text = widget.selectedRC.roundness.toString();
-    _straightnessController.text = widget.selectedRC.straightness.toString();
+    _rcnoController.text = _initializeTextController(widget.selectedRC.rcno);
+    _machineController.text = _initializeTextController(widget.selectedRC.machine);
+    _materialController.text = _initializeTextController(widget.selectedRC.material);
+    _supplierController.text = _initializeTextController(widget.selectedRC.supplier);
+    _hardness1Controller.text = _initializeTextController(widget.selectedRC.hardness1);
+    _hardness2Controller.text = _initializeTextController(widget.selectedRC.hardness2);
+    _targetDimensionsController.text = _initializeTextController(widget.selectedRC.targetDimensions);
+    _maxDimensionalAllowanceController.text = _initializeTextController(widget.selectedRC.maxDimensionalAllowance);
+    _minDimensionalAllowanceController.text = _initializeTextController(widget.selectedRC.minDimensionalAllowance);
+    _measuredDimensionsController.text = _initializeTextController(widget.selectedRC.measuredDimensions);
+    _ambientHumidityController.text = _initializeTextController(widget.selectedRC.ambientHumidity);
+    _ambientTemperatureController.text = _initializeTextController(widget.selectedRC.ambientTemperature);
+    _feedRateController.text = _initializeTextController(widget.selectedRC.feedRate);
+    _spindleSpeedRoughController.text = _initializeTextController(widget.selectedRC.spindleSpeedRough);
+    _spindleSpeedFineController.text = _initializeTextController(widget.selectedRC.spindleSpeedFine);
+    _cuttingVolumeController.text = _initializeTextController(widget.selectedRC.cuttingVolume);
+    _spindleCurrentController.text = _initializeTextController(widget.selectedRC.spindleCurrent);
+    _maxDimensionalAccuracyController.text = _initializeTextController(widget.selectedRC.maxDimensionalAccuracy);
+    _minDimensionalAccuracyController.text = _initializeTextController(widget.selectedRC.minDimensionalAccuracy);
+    _surfaceRoughness1Controller.text = _initializeTextController(widget.selectedRC.surfaceRoughness1);
+    _surfaceRoughness2Controller.text = _initializeTextController(widget.selectedRC.surfaceRoughness2);
+    _surfaceRoughness3Controller.text = _initializeTextController(widget.selectedRC.surfaceRoughness3);
+    _roundnessController.text = _initializeTextController(widget.selectedRC.roundness);
+    _straightnessController.text = _initializeTextController(widget.selectedRC.straightness);
 
     _initializeRCs();
     super.initState();
@@ -160,6 +168,7 @@ class _RCDetailsState extends State<RCDetails> {
                               controller: _rcnoController,
                               errorText: "這是必需的",
                               mainLabel: "批號",
+                              required: true,
                               specialValidator: () {
                                 if (_existingRCs.any((rc) => rc.rcno != _oldRcno && rc.rcno!.toUpperCase() == _rcnoController.text.trim().toUpperCase())) {
                                   return "這個條目已經存在";

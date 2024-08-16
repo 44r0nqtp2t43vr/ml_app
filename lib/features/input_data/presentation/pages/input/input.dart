@@ -19,30 +19,30 @@ class _InputState extends State<Input> {
   List<dynamic> _existingRCs = [];
 
   final _formKey = GlobalKey<FormState>();
-  final _rcnoController = TextEditingController();
-  final _machineController = TextEditingController();
-  final _materialController = TextEditingController();
-  final _supplierController = TextEditingController();
-  final _hardness1Controller = TextEditingController();
-  final _hardness2Controller = TextEditingController();
-  final _targetDimensionsController = TextEditingController();
-  final _maxDimensionalAllowanceController = TextEditingController();
-  final _minDimensionalAllowanceController = TextEditingController();
-  final _measuredDimensionsController = TextEditingController();
-  final _ambientHumidityController = TextEditingController();
-  final _ambientTemperatureController = TextEditingController();
-  final _feedRateController = TextEditingController();
-  final _spindleSpeedRoughController = TextEditingController();
-  final _spindleSpeedFineController = TextEditingController();
-  final _cuttingVolumeController = TextEditingController();
-  final _spindleCurrentController = TextEditingController();
-  final _maxDimensionalAccuracyController = TextEditingController();
-  final _minDimensionalAccuracyController = TextEditingController();
-  final _surfaceRoughness1Controller = TextEditingController();
-  final _surfaceRoughness2Controller = TextEditingController();
-  final _surfaceRoughness3Controller = TextEditingController();
-  final _roundnessController = TextEditingController();
-  final _straightnessController = TextEditingController();
+  final _rcnoController = TextEditingController(text: '');
+  final _machineController = TextEditingController(text: '');
+  final _materialController = TextEditingController(text: '');
+  final _supplierController = TextEditingController(text: '');
+  final _hardness1Controller = TextEditingController(text: '');
+  final _hardness2Controller = TextEditingController(text: '');
+  final _targetDimensionsController = TextEditingController(text: '');
+  final _maxDimensionalAllowanceController = TextEditingController(text: '');
+  final _minDimensionalAllowanceController = TextEditingController(text: '');
+  final _measuredDimensionsController = TextEditingController(text: '');
+  final _ambientHumidityController = TextEditingController(text: '');
+  final _ambientTemperatureController = TextEditingController(text: '');
+  final _feedRateController = TextEditingController(text: '');
+  final _spindleSpeedRoughController = TextEditingController(text: '');
+  final _spindleSpeedFineController = TextEditingController(text: '');
+  final _cuttingVolumeController = TextEditingController(text: '');
+  final _spindleCurrentController = TextEditingController(text: '');
+  final _maxDimensionalAccuracyController = TextEditingController(text: '');
+  final _minDimensionalAccuracyController = TextEditingController(text: '');
+  final _surfaceRoughness1Controller = TextEditingController(text: '');
+  final _surfaceRoughness2Controller = TextEditingController(text: '');
+  final _surfaceRoughness3Controller = TextEditingController(text: '');
+  final _roundnessController = TextEditingController(text: '');
+  final _straightnessController = TextEditingController(text: '');
 
   Future<void> _initializeRCs() async {
     sl<FilesController>().getRCsList().then((value) {
@@ -51,6 +51,10 @@ class _InputState extends State<Input> {
         _isLoadingRCs = false;
       });
     });
+  }
+
+  double? _saveDoubleData(String data) {
+    return data.isEmpty ? null : double.parse(data);
   }
 
   void _saveData(BuildContext context) async {
@@ -62,24 +66,24 @@ class _InputState extends State<Input> {
         _newRC.supplier = _supplierController.text.trim();
         _newRC.hardness1 = _hardness1Controller.text.trim();
         _newRC.hardness2 = _hardness2Controller.text.trim();
-        _newRC.targetDimensions = double.parse(_targetDimensionsController.text.trim());
-        _newRC.maxDimensionalAllowance = double.parse(_maxDimensionalAllowanceController.text.trim());
-        _newRC.minDimensionalAllowance = double.parse(_minDimensionalAllowanceController.text.trim());
-        _newRC.measuredDimensions = double.parse(_measuredDimensionsController.text.trim());
-        _newRC.ambientHumidity = double.parse(_ambientHumidityController.text.trim());
-        _newRC.ambientTemperature = double.parse(_ambientTemperatureController.text.trim());
-        _newRC.feedRate = double.parse(_feedRateController.text.trim());
-        _newRC.spindleSpeedRough = double.parse(_spindleSpeedRoughController.text.trim());
-        _newRC.spindleSpeedFine = double.parse(_spindleSpeedFineController.text.trim());
-        _newRC.cuttingVolume = double.parse(_cuttingVolumeController.text.trim());
-        _newRC.spindleCurrent = double.parse(_spindleCurrentController.text.trim());
-        _newRC.maxDimensionalAccuracy = double.parse(_maxDimensionalAccuracyController.text.trim());
-        _newRC.minDimensionalAccuracy = double.parse(_minDimensionalAccuracyController.text.trim());
-        _newRC.surfaceRoughness1 = double.parse(_surfaceRoughness1Controller.text.trim());
-        _newRC.surfaceRoughness2 = double.parse(_surfaceRoughness2Controller.text.trim());
-        _newRC.surfaceRoughness3 = double.parse(_surfaceRoughness3Controller.text.trim());
-        _newRC.roundness = double.parse(_roundnessController.text.trim());
-        _newRC.straightness = double.parse(_straightnessController.text.trim());
+        _newRC.targetDimensions = _saveDoubleData(_targetDimensionsController.text.trim());
+        _newRC.maxDimensionalAllowance = _saveDoubleData(_maxDimensionalAllowanceController.text.trim());
+        _newRC.minDimensionalAllowance = _saveDoubleData(_minDimensionalAllowanceController.text.trim());
+        _newRC.measuredDimensions = _saveDoubleData(_measuredDimensionsController.text.trim());
+        _newRC.ambientHumidity = _saveDoubleData(_ambientHumidityController.text.trim());
+        _newRC.ambientTemperature = _saveDoubleData(_ambientTemperatureController.text.trim());
+        _newRC.feedRate = _saveDoubleData(_feedRateController.text.trim());
+        _newRC.spindleSpeedRough = _saveDoubleData(_spindleSpeedRoughController.text.trim());
+        _newRC.spindleSpeedFine = _saveDoubleData(_spindleSpeedFineController.text.trim());
+        _newRC.cuttingVolume = _saveDoubleData(_cuttingVolumeController.text.trim());
+        _newRC.spindleCurrent = _saveDoubleData(_spindleCurrentController.text.trim());
+        _newRC.maxDimensionalAccuracy = _saveDoubleData(_maxDimensionalAccuracyController.text.trim());
+        _newRC.minDimensionalAccuracy = _saveDoubleData(_minDimensionalAccuracyController.text.trim());
+        _newRC.surfaceRoughness1 = _saveDoubleData(_surfaceRoughness1Controller.text.trim());
+        _newRC.surfaceRoughness2 = _saveDoubleData(_surfaceRoughness2Controller.text.trim());
+        _newRC.surfaceRoughness3 = _saveDoubleData(_surfaceRoughness3Controller.text.trim());
+        _newRC.roundness = _saveDoubleData(_roundnessController.text.trim());
+        _newRC.straightness = _saveDoubleData(_straightnessController.text.trim());
       });
 
       sl<FilesController>().writeCsvToDirectory(_newRC).then((value) {
@@ -123,6 +127,7 @@ class _InputState extends State<Input> {
                               controller: _rcnoController,
                               errorText: "這是必需的",
                               mainLabel: "批號",
+                              required: true,
                               specialValidator: () {
                                 if (_existingRCs.any((rc) => rc.rcno!.toUpperCase() == _rcnoController.text.trim().toUpperCase())) {
                                   return "這個條目已經存在";
