@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ml_app/core/controllers/files_controller.dart';
+import 'package:ml_app/core/controllers/interpreter_controller.dart';
 import 'package:ml_app/core/widgets/app_button.dart';
 import 'package:ml_app/core/widgets/app_text_field.dart';
 import 'package:ml_app/features/input_data/domain/rc.dart';
@@ -355,7 +356,7 @@ class _InputState extends State<Input> {
                     ),
                     const SizedBox(height: 40),
                     AppButton(
-                      onPressed: _isPredictable ? () {} : null,
+                      onPressed: _isPredictable ? () => sl<InterpreterController>().predict() : null,
                       textData: "AI預測",
                     ),
                     const SizedBox(height: 20),
