@@ -16,6 +16,7 @@ class Input extends StatefulWidget {
 class _InputState extends State<Input> {
   final RC _newRC = RC();
   bool _isLoadingRCs = true;
+  bool _isPredictable = false;
   List<dynamic> _existingRCs = [];
 
   final _formKey = GlobalKey<FormState>();
@@ -51,6 +52,18 @@ class _InputState extends State<Input> {
         _isLoadingRCs = false;
       });
     });
+  }
+
+  void _initializeControllers() {
+    _machineController.addListener(isPredictableCheck);
+    _hardness1Controller.addListener(isPredictableCheck);
+    _hardness2Controller.addListener(isPredictableCheck);
+    _targetDimensionsController.addListener(isPredictableCheck);
+    _maxDimensionalAllowanceController.addListener(isPredictableCheck);
+    _minDimensionalAllowanceController.addListener(isPredictableCheck);
+    _measuredDimensionsController.addListener(isPredictableCheck);
+    _ambientHumidityController.addListener(isPredictableCheck);
+    _ambientTemperatureController.addListener(isPredictableCheck);
   }
 
   double? _saveDoubleData(String data) {
@@ -92,9 +105,36 @@ class _InputState extends State<Input> {
     }
   }
 
+  void isPredictableCheck() {
+    final machine = _machineController.text.trim();
+    final hardness1 = _hardness1Controller.text.trim();
+    final hardness2 = _hardness2Controller.text.trim();
+    final targetDimensions = _targetDimensionsController.text.trim();
+    final maxDimensionalAllowance = _maxDimensionalAllowanceController.text.trim();
+    final minDimensionalAllowance = _minDimensionalAllowanceController.text.trim();
+    final measuredDimensions = _measuredDimensionsController.text.trim();
+    final ambientHumidity = _ambientHumidityController.text.trim();
+    final ambientTemperature = _ambientTemperatureController.text.trim();
+
+    if (machine.isNotEmpty && hardness1.isNotEmpty && hardness2.isNotEmpty && (targetDimensions.isNotEmpty && double.tryParse(targetDimensions) != null) && (maxDimensionalAllowance.isNotEmpty && double.tryParse(maxDimensionalAllowance) != null) && (minDimensionalAllowance.isNotEmpty && double.tryParse(minDimensionalAllowance) != null) && (measuredDimensions.isNotEmpty && double.tryParse(measuredDimensions) != null) && (ambientHumidity.isNotEmpty && double.tryParse(ambientHumidity) != null) && (ambientTemperature.isNotEmpty && double.tryParse(ambientTemperature) != null)) {
+      if (_isPredictable == false) {
+        setState(() {
+          _isPredictable = true;
+        });
+      }
+    } else {
+      if (_isPredictable == true) {
+        setState(() {
+          _isPredictable = false;
+        });
+      }
+    }
+  }
+
   @override
   void initState() {
     _initializeRCs();
+    _initializeControllers();
     super.initState();
   }
 
@@ -314,6 +354,11 @@ class _InputState extends State<Input> {
                       ),
                     ),
                     const SizedBox(height: 40),
+                    AppButton(
+                      onPressed: _isPredictable ? () {} : null,
+                      textData: "AI預測",
+                    ),
+                    const SizedBox(height: 20),
                     AppButton(
                       onPressed: () => _saveData(context),
                       textData: "儲存",
