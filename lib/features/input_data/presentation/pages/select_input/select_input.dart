@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ml_app/core/controllers/interpreter_controller.dart';
 import 'package:ml_app/core/widgets/app_button.dart';
+import 'package:ml_app/injection_container.dart';
 
 class SelectInput extends StatelessWidget {
   const SelectInput({super.key});
@@ -46,6 +48,7 @@ class SelectInput extends StatelessWidget {
   }
 
   void _onInputButtonPressed(BuildContext context) {
+    sl<InterpreterController>().clearModelResults();
     Navigator.pushNamed(context, '/input');
   }
 

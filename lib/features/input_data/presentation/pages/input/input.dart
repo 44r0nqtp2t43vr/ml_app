@@ -5,6 +5,7 @@ import 'package:ml_app/core/controllers/interpreter_controller.dart';
 import 'package:ml_app/core/widgets/app_button.dart';
 import 'package:ml_app/core/widgets/app_text_field.dart';
 import 'package:ml_app/features/input_data/domain/rc.dart';
+import 'package:ml_app/features/predict_data/domain/model_input.dart';
 import 'package:ml_app/injection_container.dart';
 
 class Input extends StatefulWidget {
@@ -130,6 +131,51 @@ class _InputState extends State<Input> {
         });
       }
     }
+  }
+
+  void _predictData(BuildContext context) {
+    final currentRC = RC(
+      rcno: _rcnoController.text.trim(),
+      machine: _machineController.text.trim(),
+      material: _materialController.text.trim(),
+      supplier: _supplierController.text.trim(),
+      hardness1: _hardness1Controller.text.trim(),
+      hardness2: _hardness2Controller.text.trim(),
+      targetDimensions: _saveDoubleData(_targetDimensionsController.text.trim()),
+      maxDimensionalAllowance: _saveDoubleData(_maxDimensionalAllowanceController.text.trim()),
+      minDimensionalAllowance: _saveDoubleData(_minDimensionalAllowanceController.text.trim()),
+      measuredDimensions: _saveDoubleData(_measuredDimensionsController.text.trim()),
+      ambientHumidity: _saveDoubleData(_ambientHumidityController.text.trim()),
+      ambientTemperature: _saveDoubleData(_ambientTemperatureController.text.trim()),
+      feedRate: _saveDoubleData(_feedRateController.text.trim()),
+      spindleSpeedRough: _saveDoubleData(_spindleSpeedRoughController.text.trim()),
+      spindleSpeedFine: _saveDoubleData(_spindleSpeedFineController.text.trim()),
+      cuttingVolume: _saveDoubleData(_cuttingVolumeController.text.trim()),
+      spindleCurrent: _saveDoubleData(_spindleCurrentController.text.trim()),
+      maxDimensionalAccuracy: _saveDoubleData(_maxDimensionalAccuracyController.text.trim()),
+      minDimensionalAccuracy: _saveDoubleData(_minDimensionalAccuracyController.text.trim()),
+      surfaceRoughness1: _saveDoubleData(_surfaceRoughness1Controller.text.trim()),
+      surfaceRoughness2: _saveDoubleData(_surfaceRoughness2Controller.text.trim()),
+      surfaceRoughness3: _saveDoubleData(_surfaceRoughness3Controller.text.trim()),
+      roundness: _saveDoubleData(_roundnessController.text.trim()),
+      straightness: _saveDoubleData(_straightnessController.text.trim()),
+    );
+
+    final modelInput = ModelInput(
+      machine: currentRC.machine,
+      hardness1: currentRC.hardness1,
+      hardness2: currentRC.hardness2,
+      targetDimensions: currentRC.targetDimensions,
+      maxDimensionalAllowance: currentRC.maxDimensionalAllowance,
+      minDimensionalAllowance: currentRC.minDimensionalAllowance,
+      measuredDimensions: currentRC.measuredDimensions,
+      ambientHumidity: currentRC.ambientHumidity,
+      ambientTemperature: currentRC.ambientTemperature,
+    );
+
+    sl<InterpreterController>().setCurrentRC(currentRC);
+    sl<InterpreterController>().setCurrentModelInput(modelInput);
+    sl<InterpreterController>().predict();
   }
 
   @override
@@ -356,7 +402,7 @@ class _InputState extends State<Input> {
                     ),
                     const SizedBox(height: 40),
                     AppButton(
-                      onPressed: _isPredictable ? () => sl<InterpreterController>().predict() : null,
+                      onPressed: _isPredictable ? () => _predictData(context) : null,
                       textData: "AI預測",
                     ),
                     const SizedBox(height: 20),
