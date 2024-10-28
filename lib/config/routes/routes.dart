@@ -4,6 +4,7 @@ import 'package:ml_app/features/input_data/presentation/pages/history/history.da
 import 'package:ml_app/features/input_data/presentation/pages/input/input.dart';
 import 'package:ml_app/features/input_data/presentation/pages/rc_details/rc_details.dart';
 import 'package:ml_app/features/input_data/presentation/pages/select_input/select_input.dart';
+import 'package:ml_app/features/predict_data/presentation/pages/model_result.dart';
 
 class AppRoutes {
   static Route onGenerateRoutes(RouteSettings settings) {
@@ -19,6 +20,9 @@ class AppRoutes {
 
       case '/rcDetails':
         return _materialRoute(RCDetails(selectedRC: settings.arguments as RC));
+
+      case '/modelResult':
+        return _materialRoute(const ModelResult());
 
       default:
         return _materialRoute(const SelectInput());

@@ -77,4 +77,11 @@ class InterpreterController extends GetxController {
 
     currentModelOutput = ModelOutput.fromList(output[0], isRough);
   }
+
+  void replaceRCWithMO() {
+    currentRC!.feedRate = currentModelOutput!.feedRate;
+    currentRC!.spindleSpeedRough = currentModelOutput!.spindleSpeedRough;
+    currentRC!.spindleSpeedFine = currentModelOutput!.spindleSpeedFine;
+    currentRC!.spindleCurrent = currentModelOutput!.spindleCurrent;
+  }
 }

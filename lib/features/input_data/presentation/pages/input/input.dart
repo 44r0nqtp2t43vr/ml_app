@@ -56,7 +56,13 @@ class _InputState extends State<Input> {
     });
   }
 
+  String _initializeTextController(dynamic property) {
+    return property == null ? '' : property.toString();
+  }
+
   void _initializeControllers() {
+    final currentRC = sl<InterpreterController>().currentRC;
+
     _machineController.addListener(isPredictableCheck);
     _hardness1Controller.addListener(isPredictableCheck);
     _hardness2Controller.addListener(isPredictableCheck);
@@ -66,6 +72,33 @@ class _InputState extends State<Input> {
     _measuredDimensionsController.addListener(isPredictableCheck);
     _ambientHumidityController.addListener(isPredictableCheck);
     _ambientTemperatureController.addListener(isPredictableCheck);
+
+    if (currentRC != null) {
+      _rcnoController.text = _initializeTextController(currentRC.rcno);
+      _machineController.text = _initializeTextController(currentRC.machine);
+      _materialController.text = _initializeTextController(currentRC.material);
+      _supplierController.text = _initializeTextController(currentRC.supplier);
+      _hardness1Controller.text = _initializeTextController(currentRC.hardness1);
+      _hardness2Controller.text = _initializeTextController(currentRC.hardness2);
+      _targetDimensionsController.text = _initializeTextController(currentRC.targetDimensions);
+      _maxDimensionalAllowanceController.text = _initializeTextController(currentRC.maxDimensionalAllowance);
+      _minDimensionalAllowanceController.text = _initializeTextController(currentRC.minDimensionalAllowance);
+      _measuredDimensionsController.text = _initializeTextController(currentRC.measuredDimensions);
+      _ambientHumidityController.text = _initializeTextController(currentRC.ambientHumidity);
+      _ambientTemperatureController.text = _initializeTextController(currentRC.ambientTemperature);
+      _feedRateController.text = _initializeTextController(currentRC.feedRate);
+      _spindleSpeedRoughController.text = _initializeTextController(currentRC.spindleSpeedRough);
+      _spindleSpeedFineController.text = _initializeTextController(currentRC.spindleSpeedFine);
+      _cuttingVolumeController.text = _initializeTextController(currentRC.cuttingVolume);
+      _spindleCurrentController.text = _initializeTextController(currentRC.spindleCurrent);
+      _maxDimensionalAccuracyController.text = _initializeTextController(currentRC.maxDimensionalAccuracy);
+      _minDimensionalAccuracyController.text = _initializeTextController(currentRC.minDimensionalAccuracy);
+      _surfaceRoughness1Controller.text = _initializeTextController(currentRC.surfaceRoughness1);
+      _surfaceRoughness2Controller.text = _initializeTextController(currentRC.surfaceRoughness2);
+      _surfaceRoughness3Controller.text = _initializeTextController(currentRC.surfaceRoughness3);
+      _roundnessController.text = _initializeTextController(currentRC.roundness);
+      _straightnessController.text = _initializeTextController(currentRC.straightness);
+    }
   }
 
   double? _saveDoubleData(String data) {
@@ -141,24 +174,24 @@ class _InputState extends State<Input> {
       supplier: _supplierController.text.trim(),
       hardness1: _hardness1Controller.text.trim(),
       hardness2: _hardness2Controller.text.trim(),
-      targetDimensions: _saveDoubleData(_targetDimensionsController.text.trim()),
-      maxDimensionalAllowance: _saveDoubleData(_maxDimensionalAllowanceController.text.trim()),
-      minDimensionalAllowance: _saveDoubleData(_minDimensionalAllowanceController.text.trim()),
-      measuredDimensions: _saveDoubleData(_measuredDimensionsController.text.trim()),
-      ambientHumidity: _saveDoubleData(_ambientHumidityController.text.trim()),
-      ambientTemperature: _saveDoubleData(_ambientTemperatureController.text.trim()),
-      feedRate: _saveDoubleData(_feedRateController.text.trim()),
-      spindleSpeedRough: _saveDoubleData(_spindleSpeedRoughController.text.trim()),
-      spindleSpeedFine: _saveDoubleData(_spindleSpeedFineController.text.trim()),
-      cuttingVolume: _saveDoubleData(_cuttingVolumeController.text.trim()),
-      spindleCurrent: _saveDoubleData(_spindleCurrentController.text.trim()),
-      maxDimensionalAccuracy: _saveDoubleData(_maxDimensionalAccuracyController.text.trim()),
-      minDimensionalAccuracy: _saveDoubleData(_minDimensionalAccuracyController.text.trim()),
-      surfaceRoughness1: _saveDoubleData(_surfaceRoughness1Controller.text.trim()),
-      surfaceRoughness2: _saveDoubleData(_surfaceRoughness2Controller.text.trim()),
-      surfaceRoughness3: _saveDoubleData(_surfaceRoughness3Controller.text.trim()),
-      roundness: _saveDoubleData(_roundnessController.text.trim()),
-      straightness: _saveDoubleData(_straightnessController.text.trim()),
+      targetDimensions: double.tryParse(_targetDimensionsController.text.trim()) == null ? null : _saveDoubleData(_targetDimensionsController.text.trim()),
+      maxDimensionalAllowance: double.tryParse(_maxDimensionalAllowanceController.text.trim()) == null ? null : _saveDoubleData(_maxDimensionalAllowanceController.text.trim()),
+      minDimensionalAllowance: double.tryParse(_minDimensionalAllowanceController.text.trim()) == null ? null : _saveDoubleData(_minDimensionalAllowanceController.text.trim()),
+      measuredDimensions: double.tryParse(_measuredDimensionsController.text.trim()) == null ? null : _saveDoubleData(_measuredDimensionsController.text.trim()),
+      ambientHumidity: double.tryParse(_ambientHumidityController.text.trim()) == null ? null : _saveDoubleData(_ambientHumidityController.text.trim()),
+      ambientTemperature: double.tryParse(_ambientTemperatureController.text.trim()) == null ? null : _saveDoubleData(_ambientTemperatureController.text.trim()),
+      feedRate: double.tryParse(_feedRateController.text.trim()) == null ? null : _saveDoubleData(_feedRateController.text.trim()),
+      spindleSpeedRough: double.tryParse(_spindleSpeedRoughController.text.trim()) == null ? null : _saveDoubleData(_spindleSpeedRoughController.text.trim()),
+      spindleSpeedFine: double.tryParse(_spindleSpeedFineController.text.trim()) == null ? null : _saveDoubleData(_spindleSpeedFineController.text.trim()),
+      cuttingVolume: double.tryParse(_cuttingVolumeController.text.trim()) == null ? null : _saveDoubleData(_cuttingVolumeController.text.trim()),
+      spindleCurrent: double.tryParse(_spindleCurrentController.text.trim()) == null ? null : _saveDoubleData(_spindleCurrentController.text.trim()),
+      maxDimensionalAccuracy: double.tryParse(_maxDimensionalAccuracyController.text.trim()) == null ? null : _saveDoubleData(_maxDimensionalAccuracyController.text.trim()),
+      minDimensionalAccuracy: double.tryParse(_minDimensionalAccuracyController.text.trim()) == null ? null : _saveDoubleData(_minDimensionalAccuracyController.text.trim()),
+      surfaceRoughness1: double.tryParse(_surfaceRoughness1Controller.text.trim()) == null ? null : _saveDoubleData(_surfaceRoughness1Controller.text.trim()),
+      surfaceRoughness2: double.tryParse(_surfaceRoughness2Controller.text.trim()) == null ? null : _saveDoubleData(_surfaceRoughness2Controller.text.trim()),
+      surfaceRoughness3: double.tryParse(_surfaceRoughness3Controller.text.trim()) == null ? null : _saveDoubleData(_surfaceRoughness3Controller.text.trim()),
+      roundness: double.tryParse(_roundnessController.text.trim()) == null ? null : _saveDoubleData(_roundnessController.text.trim()),
+      straightness: double.tryParse(_straightnessController.text.trim()) == null ? null : _saveDoubleData(_straightnessController.text.trim()),
     );
 
     final modelInput = ModelInput(
@@ -175,7 +208,7 @@ class _InputState extends State<Input> {
 
     sl<InterpreterController>().setCurrentRC(currentRC);
     sl<InterpreterController>().setCurrentModelInput(modelInput);
-    sl<InterpreterController>().predict();
+    Navigator.pushNamed(context, '/modelResult');
   }
 
   @override
