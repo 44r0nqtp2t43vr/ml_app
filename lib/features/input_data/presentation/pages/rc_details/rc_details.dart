@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ml_app/core/controllers/files_controller.dart';
+import 'package:ml_app/core/controllers/interpreter_controller.dart';
 import 'package:ml_app/core/widgets/app_button.dart';
 import 'package:ml_app/core/widgets/app_labelled_text.dart';
 import 'package:ml_app/core/widgets/app_text_field.dart';
 import 'package:ml_app/features/input_data/domain/rc.dart';
+import 'package:ml_app/features/predict_data/domain/model_input.dart';
 import 'package:ml_app/injection_container.dart';
 
 class RCDetails extends StatefulWidget {
@@ -20,6 +22,7 @@ class _RCDetailsState extends State<RCDetails> {
   late RC _selectedRC;
   late String _oldRcno;
   bool _isLoadingRCs = true;
+  bool _isPredictable = false;
   List<dynamic> _existingRCs = [];
 
   final _formKey = GlobalKey<FormState>();
@@ -96,39 +99,127 @@ class _RCDetailsState extends State<RCDetails> {
     }
   }
 
+  void isPredictableCheck() {
+    final machine = _machineController.text.trim();
+    final hardness1 = _hardness1Controller.text.trim();
+    final hardness2 = _hardness2Controller.text.trim();
+    final targetDimensions = _targetDimensionsController.text.trim();
+    final maxDimensionalAllowance = _maxDimensionalAllowanceController.text.trim();
+    final minDimensionalAllowance = _minDimensionalAllowanceController.text.trim();
+    final measuredDimensions = _measuredDimensionsController.text.trim();
+    final ambientHumidity = _ambientHumidityController.text.trim();
+    final ambientTemperature = _ambientTemperatureController.text.trim();
+
+    if (machine.isNotEmpty && hardness1.isNotEmpty && hardness2.isNotEmpty && (targetDimensions.isNotEmpty && double.tryParse(targetDimensions) != null) && (maxDimensionalAllowance.isNotEmpty && double.tryParse(maxDimensionalAllowance) != null) && (minDimensionalAllowance.isNotEmpty && double.tryParse(minDimensionalAllowance) != null) && (measuredDimensions.isNotEmpty && double.tryParse(measuredDimensions) != null) && (ambientHumidity.isNotEmpty && double.tryParse(ambientHumidity) != null) && (ambientTemperature.isNotEmpty && double.tryParse(ambientTemperature) != null)) {
+      if (_isPredictable == false) {
+        setState(() {
+          _isPredictable = true;
+        });
+      }
+    } else {
+      if (_isPredictable == true) {
+        setState(() {
+          _isPredictable = false;
+        });
+      }
+    }
+  }
+
   String _initializeTextController(dynamic property) {
     return property == null ? '' : property.toString();
+  }
+
+  void _initializeControllers() {
+    RC? basisRC = sl<InterpreterController>().currentRC;
+    basisRC ??= widget.selectedRC;
+
+    _machineController.addListener(isPredictableCheck);
+    _hardness1Controller.addListener(isPredictableCheck);
+    _hardness2Controller.addListener(isPredictableCheck);
+    _targetDimensionsController.addListener(isPredictableCheck);
+    _maxDimensionalAllowanceController.addListener(isPredictableCheck);
+    _minDimensionalAllowanceController.addListener(isPredictableCheck);
+    _measuredDimensionsController.addListener(isPredictableCheck);
+    _ambientHumidityController.addListener(isPredictableCheck);
+    _ambientTemperatureController.addListener(isPredictableCheck);
+
+    _rcnoController.text = _initializeTextController(basisRC.rcno);
+    _machineController.text = _initializeTextController(basisRC.machine);
+    _materialController.text = _initializeTextController(basisRC.material);
+    _supplierController.text = _initializeTextController(basisRC.supplier);
+    _hardness1Controller.text = _initializeTextController(basisRC.hardness1);
+    _hardness2Controller.text = _initializeTextController(basisRC.hardness2);
+    _targetDimensionsController.text = _initializeTextController(basisRC.targetDimensions);
+    _maxDimensionalAllowanceController.text = _initializeTextController(basisRC.maxDimensionalAllowance);
+    _minDimensionalAllowanceController.text = _initializeTextController(basisRC.minDimensionalAllowance);
+    _measuredDimensionsController.text = _initializeTextController(basisRC.measuredDimensions);
+    _ambientHumidityController.text = _initializeTextController(basisRC.ambientHumidity);
+    _ambientTemperatureController.text = _initializeTextController(basisRC.ambientTemperature);
+    _feedRateController.text = _initializeTextController(basisRC.feedRate);
+    _spindleSpeedRoughController.text = _initializeTextController(basisRC.spindleSpeedRough);
+    _spindleSpeedFineController.text = _initializeTextController(basisRC.spindleSpeedFine);
+    _cuttingVolumeController.text = _initializeTextController(basisRC.cuttingVolume);
+    _spindleCurrentController.text = _initializeTextController(basisRC.spindleCurrent);
+    _maxDimensionalAccuracyController.text = _initializeTextController(basisRC.maxDimensionalAccuracy);
+    _minDimensionalAccuracyController.text = _initializeTextController(basisRC.minDimensionalAccuracy);
+    _surfaceRoughness1Controller.text = _initializeTextController(basisRC.surfaceRoughness1);
+    _surfaceRoughness2Controller.text = _initializeTextController(basisRC.surfaceRoughness2);
+    _surfaceRoughness3Controller.text = _initializeTextController(basisRC.surfaceRoughness3);
+    _roundnessController.text = _initializeTextController(basisRC.roundness);
+    _straightnessController.text = _initializeTextController(basisRC.straightness);
+  }
+
+  void _predictData(BuildContext context) {
+    final currentRC = RC(
+      rcno: _rcnoController.text.trim(),
+      machine: _machineController.text.trim(),
+      material: _materialController.text.trim(),
+      supplier: _supplierController.text.trim(),
+      hardness1: _hardness1Controller.text.trim(),
+      hardness2: _hardness2Controller.text.trim(),
+      targetDimensions: double.tryParse(_targetDimensionsController.text.trim()) == null ? null : _saveDoubleData(_targetDimensionsController.text.trim()),
+      maxDimensionalAllowance: double.tryParse(_maxDimensionalAllowanceController.text.trim()) == null ? null : _saveDoubleData(_maxDimensionalAllowanceController.text.trim()),
+      minDimensionalAllowance: double.tryParse(_minDimensionalAllowanceController.text.trim()) == null ? null : _saveDoubleData(_minDimensionalAllowanceController.text.trim()),
+      measuredDimensions: double.tryParse(_measuredDimensionsController.text.trim()) == null ? null : _saveDoubleData(_measuredDimensionsController.text.trim()),
+      ambientHumidity: double.tryParse(_ambientHumidityController.text.trim()) == null ? null : _saveDoubleData(_ambientHumidityController.text.trim()),
+      ambientTemperature: double.tryParse(_ambientTemperatureController.text.trim()) == null ? null : _saveDoubleData(_ambientTemperatureController.text.trim()),
+      feedRate: double.tryParse(_feedRateController.text.trim()) == null ? null : _saveDoubleData(_feedRateController.text.trim()),
+      spindleSpeedRough: double.tryParse(_spindleSpeedRoughController.text.trim()) == null ? null : _saveDoubleData(_spindleSpeedRoughController.text.trim()),
+      spindleSpeedFine: double.tryParse(_spindleSpeedFineController.text.trim()) == null ? null : _saveDoubleData(_spindleSpeedFineController.text.trim()),
+      cuttingVolume: double.tryParse(_cuttingVolumeController.text.trim()) == null ? null : _saveDoubleData(_cuttingVolumeController.text.trim()),
+      spindleCurrent: double.tryParse(_spindleCurrentController.text.trim()) == null ? null : _saveDoubleData(_spindleCurrentController.text.trim()),
+      maxDimensionalAccuracy: double.tryParse(_maxDimensionalAccuracyController.text.trim()) == null ? null : _saveDoubleData(_maxDimensionalAccuracyController.text.trim()),
+      minDimensionalAccuracy: double.tryParse(_minDimensionalAccuracyController.text.trim()) == null ? null : _saveDoubleData(_minDimensionalAccuracyController.text.trim()),
+      surfaceRoughness1: double.tryParse(_surfaceRoughness1Controller.text.trim()) == null ? null : _saveDoubleData(_surfaceRoughness1Controller.text.trim()),
+      surfaceRoughness2: double.tryParse(_surfaceRoughness2Controller.text.trim()) == null ? null : _saveDoubleData(_surfaceRoughness2Controller.text.trim()),
+      surfaceRoughness3: double.tryParse(_surfaceRoughness3Controller.text.trim()) == null ? null : _saveDoubleData(_surfaceRoughness3Controller.text.trim()),
+      roundness: double.tryParse(_roundnessController.text.trim()) == null ? null : _saveDoubleData(_roundnessController.text.trim()),
+      straightness: double.tryParse(_straightnessController.text.trim()) == null ? null : _saveDoubleData(_straightnessController.text.trim()),
+    );
+
+    final modelInput = ModelInput(
+      machine: currentRC.machine,
+      hardness1: currentRC.hardness1,
+      hardness2: currentRC.hardness2,
+      targetDimensions: currentRC.targetDimensions,
+      maxDimensionalAllowance: currentRC.maxDimensionalAllowance,
+      minDimensionalAllowance: currentRC.minDimensionalAllowance,
+      measuredDimensions: currentRC.measuredDimensions,
+      ambientHumidity: currentRC.ambientHumidity,
+      ambientTemperature: currentRC.ambientTemperature,
+    );
+
+    sl<InterpreterController>().setCurrentRC(currentRC);
+    sl<InterpreterController>().setCurrentModelInput(modelInput);
+    Navigator.pushNamed(context, '/modelResult');
   }
 
   @override
   void initState() {
     _selectedRC = widget.selectedRC;
     _oldRcno = widget.selectedRC.rcno.toString();
-    _rcnoController.text = _initializeTextController(widget.selectedRC.rcno);
-    _machineController.text = _initializeTextController(widget.selectedRC.machine);
-    _materialController.text = _initializeTextController(widget.selectedRC.material);
-    _supplierController.text = _initializeTextController(widget.selectedRC.supplier);
-    _hardness1Controller.text = _initializeTextController(widget.selectedRC.hardness1);
-    _hardness2Controller.text = _initializeTextController(widget.selectedRC.hardness2);
-    _targetDimensionsController.text = _initializeTextController(widget.selectedRC.targetDimensions);
-    _maxDimensionalAllowanceController.text = _initializeTextController(widget.selectedRC.maxDimensionalAllowance);
-    _minDimensionalAllowanceController.text = _initializeTextController(widget.selectedRC.minDimensionalAllowance);
-    _measuredDimensionsController.text = _initializeTextController(widget.selectedRC.measuredDimensions);
-    _ambientHumidityController.text = _initializeTextController(widget.selectedRC.ambientHumidity);
-    _ambientTemperatureController.text = _initializeTextController(widget.selectedRC.ambientTemperature);
-    _feedRateController.text = _initializeTextController(widget.selectedRC.feedRate);
-    _spindleSpeedRoughController.text = _initializeTextController(widget.selectedRC.spindleSpeedRough);
-    _spindleSpeedFineController.text = _initializeTextController(widget.selectedRC.spindleSpeedFine);
-    _cuttingVolumeController.text = _initializeTextController(widget.selectedRC.cuttingVolume);
-    _spindleCurrentController.text = _initializeTextController(widget.selectedRC.spindleCurrent);
-    _maxDimensionalAccuracyController.text = _initializeTextController(widget.selectedRC.maxDimensionalAccuracy);
-    _minDimensionalAccuracyController.text = _initializeTextController(widget.selectedRC.minDimensionalAccuracy);
-    _surfaceRoughness1Controller.text = _initializeTextController(widget.selectedRC.surfaceRoughness1);
-    _surfaceRoughness2Controller.text = _initializeTextController(widget.selectedRC.surfaceRoughness2);
-    _surfaceRoughness3Controller.text = _initializeTextController(widget.selectedRC.surfaceRoughness3);
-    _roundnessController.text = _initializeTextController(widget.selectedRC.roundness);
-    _straightnessController.text = _initializeTextController(widget.selectedRC.straightness);
 
+    _initializeControllers();
     _initializeRCs();
     super.initState();
   }
@@ -356,6 +447,11 @@ class _RCDetailsState extends State<RCDetails> {
                       ),
                     ),
                     const SizedBox(height: 40),
+                    AppButton(
+                      onPressed: _isPredictable ? () => _predictData(context) : null,
+                      textData: "AI預測",
+                    ),
+                    const SizedBox(height: 20),
                     AppButton(
                       onPressed: () => _saveData(context),
                       textData: "更新",
